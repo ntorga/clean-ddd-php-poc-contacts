@@ -1,0 +1,33 @@
+{
+  "name": "ntorga/clean-arch-poc-php-contacts",
+  "description": "A simple contact manager API to demonstrate the concepts of Clean Architecture.",
+  "authors": [
+    {
+      "name": "Northon Torga",
+      "email": "northontorga@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/",
+      "Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": "^7.4.4",
+    "slim/slim": "^4.0",
+    "slim/psr7": "^1.1",
+    "vlucas/phpdotenv": "^5.0",
+    "league/flysystem": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9",
+    "phpstan/phpstan": "^0.12.25",
+    "phpstan/phpstan-phpunit": "^0.12.8",
+    "phpstan/phpstan-strict-rules": "^0.12.2",
+    "phpstan/extension-installer": "^1.0",
+    "phpstan/phpstan-beberlei-assert": "^0.12.2",
+    "phpstan/phpstan-deprecation-rules": "^0.12.2",
+    "ekino/phpstan-banned-code": "^0.3.1"
+  }
+}
