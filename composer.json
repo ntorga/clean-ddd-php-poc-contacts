@@ -1,6 +1,6 @@
 {
-  "name": "ntorga/clean-arch-poc-php-contacts",
-  "description": "A simple contact manager API to demonstrate the concepts of Clean Architecture.",
+  "name": "ntorga/clean-ddd-php-poc-contacts",
+  "description": "A simple contact manager API to demonstrate the concepts of Clean Architecture and DDD with PHP 7.4+.",
   "authors": [
     {
       "name": "Northon Torga",
