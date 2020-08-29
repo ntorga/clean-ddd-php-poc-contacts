@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Presentation\Api\Controller;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
-use App\Infrastructure\ContactCommandRepository;
+use App\Domain\UseCase\AddContactInteractor;
 use App\Domain\ValueObject\Nickname;
 use App\Domain\ValueObject\PersonName;
 use App\Domain\ValueObject\PhoneNumber;
-use App\Domain\UseCase\AddContactInteractor;
+use App\Infrastructure\ContactCommandRepository;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Throwable;
 
 class AddContactController
 {
@@ -20,7 +21,8 @@ class AddContactController
     public function __construct(
         Request $request,
         Response $response
-    ) {
+    )
+    {
         $this->request = $request;
         $this->response = $response;
     }
@@ -52,15 +54,14 @@ class AddContactController
                 'User created successfully with ID "' . $contactId . '".'
             );
             $responseCode = 200;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->response->getBody()->write(
                 'User creation failed!' . PHP_EOL
-                    . 'Please verify if you sent a valid name, nick and phone.'
+                . 'Please verify if you sent a valid name, nick and phone.'
             );
             $responseCode = 400;
         }
 
-        $finalResponse = $this->response->withStatus($responseCode);
-        return $finalResponse;
+        return $this->response->withStatus($responseCode);
     }
 }

@@ -9,6 +9,8 @@ use App\Domain\ValueObject\ContactId;
 use App\Domain\ValueObject\Nickname;
 use App\Domain\ValueObject\PersonName;
 use App\Domain\ValueObject\PhoneNumber;
+use RuntimeException;
+use Throwable;
 
 class AddContactInteractor
 {
@@ -16,7 +18,8 @@ class AddContactInteractor
 
     public function __construct(
         ContactCommandRepositoryInterface $contactRepository
-    ) {
+    )
+    {
         $this->contactRepository = $contactRepository;
     }
 
@@ -24,15 +27,16 @@ class AddContactInteractor
         PersonName $name,
         Nickname $nick,
         PhoneNumber $phone
-    ): ContactId {
+    ): ContactId
+    {
         try {
             $contact = $this->contactRepository->addContact(
                 $name,
                 $nick,
                 $phone
             );
-        } catch (\Throwable $e) {
-            throw new \Exception('Unable to create contact.');
+        } catch (Throwable $e) {
+            throw new RuntimeException('Unable to create contact.');
         }
         return $contact->getId();
     }
