@@ -26,7 +26,6 @@ class UpdateContactControllerTest extends TestCase
     {
         $this->loadEnvs();
         $executionParams = [
-            "id" => 1,
             "name" => "Raymond Stantz",
             "nickname" => "Raymond",
             "phone" => "555-2368"
@@ -42,10 +41,12 @@ class UpdateContactControllerTest extends TestCase
     public function testUpdateContact(): void
     {
         $this->addContact();
+        $args = ["id" => 1];
 
         $updateContact = new UpdateContactController(
             $this->request,
-            $this->response
+            $this->response,
+            $args
         );
         $result = $updateContact->action();
         self::assertEquals(200, $result->getStatusCode());

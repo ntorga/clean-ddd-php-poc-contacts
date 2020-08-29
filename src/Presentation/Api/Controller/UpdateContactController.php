@@ -19,21 +19,24 @@ class UpdateContactController
 {
     private Request $request;
     private Response $response;
+    private array $args;
 
     public function __construct(
         Request $request,
-        Response $response
+        Response $response,
+        array $args
     )
     {
         $this->request = $request;
         $this->response = $response;
+        $this->args = $args;
     }
 
     private function getExecutionParams(): array
     {
         $executionParams = $this->request->getParsedBody();
         return [
-            "id" => new ContactId($executionParams['id']),
+            "id" => new ContactId($this->args['id']),
             "name" => new PersonName($executionParams['name']),
             "nickname" => new Nickname($executionParams['nickname']),
             "phone" => new PhoneNumber($executionParams['phone'])
