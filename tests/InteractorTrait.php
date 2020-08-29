@@ -19,8 +19,8 @@ trait InteractorTrait
         $commandRepo = new ContactCommandRepository();
         $addContact = new AddContactInteractor($commandRepo);
         $addContact->action(
-            new PersonName('Jane Doe'),
-            new Nickname('Jane'),
+            new PersonName('Egon Spengler'),
+            new Nickname('Egon'),
             new PhoneNumber('555-2368')
         );
     }

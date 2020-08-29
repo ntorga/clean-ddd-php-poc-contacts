@@ -26,8 +26,8 @@ class AddContactControllerTest extends TestCase
     {
         $this->loadEnvs();
         $executionParams = [
-            "name" => "John Doe",
-            "nickname" => "John",
+            "name" => "Egon Spengler",
+            "nickname" => "Egon",
             "phone" => "555-2368"
         ];
         $psr17ServerRequestFactory = $this->createRequest(

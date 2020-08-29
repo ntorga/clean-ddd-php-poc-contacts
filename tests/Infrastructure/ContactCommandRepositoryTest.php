@@ -29,8 +29,8 @@ class ContactCommandRepositoryTest extends TestCase
         $contactId = new ContactId(1);
         $this->expectNotToPerformAssertions();
         $this->commandRepo->addContact(
-            new PersonName('Jane Doe'),
-            new Nickname('Jane'),
+            new PersonName('Egon Spengler'),
+            new Nickname('Egon'),
             new PhoneNumber('555-2368')
         );
         $this->commandRepo->removeContact($contactId);

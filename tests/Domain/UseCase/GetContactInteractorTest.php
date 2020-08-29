@@ -31,7 +31,7 @@ class GetContactInteractorTest extends TestCase
 
         $getContact = new GetContactInteractor($queryRepo);
         $sut = $getContact->action($contactId);
-        self::assertEquals('Jane Doe', $sut->getName());
+        self::assertEquals('Egon Spengler', $sut->getName());
 
         $this->removeContact();
     }

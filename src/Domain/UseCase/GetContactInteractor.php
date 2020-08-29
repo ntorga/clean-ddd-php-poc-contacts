@@ -30,6 +30,6 @@ class GetContactInteractor
                 return $contact;
             }
         }
-        throw new RuntimeException('Contact not found.');
+        throw new RuntimeException('Contact ID not found.');
     }
 }
