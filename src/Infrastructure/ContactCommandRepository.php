@@ -66,14 +66,4 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
             throw new RuntimeException('Contact ID provided does not exist.');
         }
     }
-
-    public function updateContact(Contact $updatedContact): void
-    {
-        $this->removeContact($updatedContact->getId());
-        $this->addContact(
-            $updatedContact->getName(),
-            $updatedContact->getNickname(),
-            $updatedContact->getPhone()
-        );
-    }
 }
