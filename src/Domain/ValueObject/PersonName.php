@@ -13,17 +13,19 @@ class PersonName implements JsonSerializable
 
     public function __construct(string $personName)
     {
-        $validLength = strlen($personName) === 20;
+        $validLength = strlen($personName) < 50;
         if (!$validLength) {
             throw new RuntimeException(
-                'Name cannot be longer than 20 characters.'
+                'Name cannot be longer than 50 characters.'
             );
         }
 
-        $onlyValidChars = ctype_alpha(str_replace(' ', '', $personName)) === TRUE;
+        $onlyValidChars = ctype_alpha(
+                str_replace(' ', '', $personName)
+            ) === TRUE;
         if (!$onlyValidChars) {
             throw new RuntimeException(
-                'Name provided is not valid.'
+                'Only alphanumeric characters are allowed on Name.'
             );
         }
 

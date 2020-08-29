@@ -13,17 +13,19 @@ class Nickname implements JsonSerializable
 
     public function __construct(string $nickname)
     {
-        $validLength = strlen($nickname) === 15;
+        $validLength = strlen($nickname) < 20;
         if (!$validLength) {
             throw new RuntimeException(
-                'Nickname cannot be longer than 15 characters.'
+                'Nickname cannot be longer than 20 characters.'
             );
         }
 
-        $onlyValidChars = ctype_alnum(str_replace(' ', '', $nickname)) === TRUE;
+        $onlyValidChars = ctype_alnum(
+                str_replace(' ', '', $nickname)
+            ) === TRUE;
         if (!$onlyValidChars) {
             throw new RuntimeException(
-                'Nickname provided is not valid.'
+                'Only alphanumeric characters are allowed on Nickname.'
             );
         }
 

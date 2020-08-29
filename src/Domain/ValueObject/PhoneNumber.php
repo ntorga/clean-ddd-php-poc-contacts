@@ -13,17 +13,17 @@ class PhoneNumber implements JsonSerializable
 
     public function __construct(string $phoneNumber)
     {
-        $validLength = strlen($phoneNumber) === 20;
+        $validLength = strlen($phoneNumber) < 30;
         if (!$validLength) {
             throw new RuntimeException(
-                'Phone numbers must have a maximum of 20 numbers.'
+                'Phone numbers must have a maximum of 30 numbers.'
             );
         }
 
-        $expectedFormat = "/\+\d\d?\d?-\d\d\d?-\d\d\d\d?\d?-\d\d\d\d/";
+        $expectedFormat = "/^(\(\d{3}\)\s|\d{3}-)?\d{3}-\d{4}$/";
         if (!preg_match($expectedFormat, $phoneNumber)) {
             throw new RuntimeException(
-                'Nickname provided is not valid.'
+                'Phone number provided must follow US format.'
             );
         }
 

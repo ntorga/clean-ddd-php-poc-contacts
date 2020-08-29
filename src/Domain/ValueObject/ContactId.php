@@ -20,7 +20,7 @@ class ContactId implements JsonSerializable
             ) === FALSE;
 
         if ($isOutOfRange) {
-            throw new RuntimeException('Contact ID is invalid.');
+            throw new RuntimeException('Contact ID out of range.');
         }
 
         $this->contactId = $contactId;
