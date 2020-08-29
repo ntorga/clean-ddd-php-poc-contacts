@@ -20,8 +20,9 @@ class UpdateContactInteractor
 
     public function action(Contact $updatedContact): void
     {
-        $this->commandRepo->removeContact($updatedContact->getId());
-        $this->commandRepo->addContact(
+        $contactId = $updatedContact->getId();
+        (new RemoveContactInteractor($this->commandRepo))->action($contactId);
+        (new AddContactInteractor($this->commandRepo))->action(
             $updatedContact->getName(),
             $updatedContact->getNickname(),
             $updatedContact->getPhone()
