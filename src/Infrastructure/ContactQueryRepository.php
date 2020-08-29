@@ -84,16 +84,4 @@ class ContactQueryRepository implements ContactQueryRepositoryInterface
         }
         return $contacts;
     }
-
-    public function getContact(ContactId $contactId): Contact
-    {
-        $contacts = $this->getContacts();
-        foreach ($contacts as $contact) {
-            $isContact = $contact->getId()->getId() === $contactId->getId();
-            if ($isContact) {
-                return $contact;
-            }
-        }
-        throw new RuntimeException('Contact not found.');
-    }
 }
