@@ -10,22 +10,70 @@ use App\Domain\ValueObject\ContactId;
 use App\Domain\ValueObject\Nickname;
 use App\Domain\ValueObject\PersonName;
 use App\Domain\ValueObject\PhoneNumber;
+use JsonException;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\FileNotFoundException;
+use League\Flysystem\Filesystem;
+use RuntimeException;
+use Throwable;
 
 class ContactCommandRepository implements ContactCommandRepositoryInterface
 {
+    private Filesystem $contactsDir;
+    private array $contacts;
+
+    public function __construct()
+    {
+        $this->contactsDir = new Filesystem(
+            new Local($_ENV["CONTACTS_DIR"])
+        );
+        $this->contacts = (new ContactQueryRepository())->getContacts();
+    }
+
     public function addContact(
         PersonName $name,
         Nickname $nickname,
         PhoneNumber $phoneNumber
-    ): Contact
+    ): void
     {
-    }
+        try {
+            $newContactId = end($this->contacts)["id"] + 1;
+        } catch (Throwable $th) {
+            $newContactId = 1;
+        }
 
-    public function updateContact(Contact $updatedContact): void
-    {
+        try {
+            $contactData = json_encode(new Contact(
+                new ContactId($newContactId),
+                $name,
+                $nickname,
+                $phoneNumber
+            ), JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new RuntimeException('Contact data is invalid.');
+        }
+
+        $contactFileName = $newContactId . '.contact';
+        $this->contactsDir->put($contactFileName, $contactData);
     }
 
     public function removeContact(ContactId $contactId): void
     {
+        $contactFileName = $contactId->getId() . '.contact';
+        try {
+            $this->contactsDir->delete($contactFileName);
+        } catch (FileNotFoundException $e) {
+            throw new RuntimeException('Contact ID provided does not exist.');
+        }
+    }
+
+    public function updateContact(Contact $updatedContact): void
+    {
+        $this->removeContact($updatedContact->getId());
+        $this->addContact(
+            $updatedContact->getName(),
+            $updatedContact->getNickname(),
+            $updatedContact->getPhone()
+        );
     }
 }

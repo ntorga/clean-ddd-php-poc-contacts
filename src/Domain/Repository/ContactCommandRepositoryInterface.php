@@ -16,7 +16,9 @@ interface ContactCommandRepositoryInterface
         PersonName $name,
         Nickname $nickname,
         PhoneNumber $phoneNumber
-    ): Contact;
-    public function updateContact(Contact $updatedContact): void;
+    ): void;
+
     public function removeContact(ContactId $contactId): void;
+
+    public function updateContact(Contact $updatedContact): void;
 }
