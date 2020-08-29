@@ -68,4 +68,21 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
             }
         }
     }
+
+    public function updateContact(Contact $updatedContact): void
+    {
+        $contactFileName = $updatedContact->getId()->getId() . '.contact';
+
+        try {
+            $contactData = json_encode($updatedContact, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new RuntimeException('Contact data is invalid.');
+        }
+
+        try {
+            $this->contactsDir->update($contactFileName, $contactData);
+        } catch (FileNotFoundException $e) {
+            throw new RuntimeException('Unable to update contact.');
+        }
+    }
 }

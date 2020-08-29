@@ -6,6 +6,8 @@ namespace App\Domain\UseCase;
 
 use App\Domain\Entity\Contact;
 use App\Domain\Repository\ContactCommandRepositoryInterface;
+use RuntimeException;
+use Throwable;
 
 class UpdateContactInteractor
 {
@@ -20,12 +22,10 @@ class UpdateContactInteractor
 
     public function action(Contact $updatedContact): void
     {
-        $contactId = $updatedContact->getId();
-        (new RemoveContactInteractor($this->commandRepo))->action($contactId);
-        (new AddContactInteractor($this->commandRepo))->action(
-            $updatedContact->getName(),
-            $updatedContact->getNickname(),
-            $updatedContact->getPhone()
-        );
+        try {
+            $this->commandRepo->updateContact($updatedContact);
+        } catch (Throwable $e) {
+            throw new RuntimeException('Unable to update contact.');
+        }
     }
 }

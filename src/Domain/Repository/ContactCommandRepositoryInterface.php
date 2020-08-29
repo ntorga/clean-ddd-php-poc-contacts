@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Repository;
 
+use App\Domain\Entity\Contact;
 use App\Domain\ValueObject\ContactId;
 use App\Domain\ValueObject\Nickname;
 use App\Domain\ValueObject\PersonName;
@@ -18,4 +19,6 @@ interface ContactCommandRepositoryInterface
     ): void;
 
     public function removeContact(ContactId $contactId): void;
+
+    public function updateContact(Contact $updatedContact): void;
 }
