@@ -39,8 +39,8 @@ class UpdateContactInteractorTest extends TestCase
         $this->addContact();
         $contact = new Contact(
             $contactId,
-            new PersonName('John Doe'),
-            new Nickname('John'),
+            new PersonName('Raymond Stantz'),
+            new Nickname('Raymond'),
             new PhoneNumber('555-2368')
         );
 
@@ -49,7 +49,7 @@ class UpdateContactInteractorTest extends TestCase
 
         $getContact = new GetContactInteractor($this->queryRepo);
         $sut = $getContact->action($contactId);
-        self::assertEquals('John Doe', $sut->getName());
+        self::assertEquals('Raymond Stantz', $sut->getName());
 
         $this->removeContact();
     }
