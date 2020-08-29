@@ -57,7 +57,7 @@ class AddContactController
             );
         } catch (Throwable $th) {
             $this->response->getBody()->write(
-                'Contact creation failed! Details: "' . $th->getMessage() . '"'
+                'Contact creation failed: ' . $th->getMessage()
             );
             return $this->response->withStatus(500);
         }

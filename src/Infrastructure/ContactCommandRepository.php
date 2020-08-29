@@ -15,7 +15,6 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Filesystem;
 use RuntimeException;
-use Throwable;
 
 class ContactCommandRepository implements ContactCommandRepositoryInterface
 {
@@ -36,10 +35,9 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
         PhoneNumber $phoneNumber
     ): void
     {
-        try {
+        $newContactId = 1;
+        if (count($this->contacts) > 0) {
             $newContactId = end($this->contacts)["id"] + 1;
-        } catch (Throwable $th) {
-            $newContactId = 1;
         }
 
         try {
@@ -82,7 +80,7 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
         try {
             $this->contactsDir->update($contactFileName, $contactData);
         } catch (FileNotFoundException $e) {
-            throw new RuntimeException('Unable to update contact.');
+            throw new RuntimeException('Contact does not exist.');
         }
     }
 }

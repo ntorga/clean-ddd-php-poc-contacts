@@ -26,7 +26,7 @@ class GetContactController
 
     private function getContactId(): ContactId
     {
-        return new ContactId($this->args["id"]);
+        return new ContactId((int)$this->args["id"]);
     }
 
     public function action(): Response

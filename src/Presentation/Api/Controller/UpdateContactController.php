@@ -36,7 +36,7 @@ class UpdateContactController
     {
         $executionParams = $this->request->getParsedBody();
         return [
-            "id" => new ContactId($this->args['id']),
+            "id" => new ContactId((int)$this->args['id']),
             "name" => new PersonName($executionParams['name']),
             "nickname" => new Nickname($executionParams['nickname']),
             "phone" => new PhoneNumber($executionParams['phone'])
@@ -66,7 +66,7 @@ class UpdateContactController
             $updateContact->action($contact);
         } catch (Throwable $th) {
             $this->response->getBody()->write(
-                'Contact update failed! Details: "' . $th->getMessage() . '"'
+                'Contact update failed: ' . $th->getMessage()
             );
             return $this->response->withStatus(500);
         }

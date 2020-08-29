@@ -24,8 +24,8 @@ class UpdateContactInteractor
     {
         try {
             $this->commandRepo->updateContact($updatedContact);
-        } catch (Throwable $e) {
-            throw new RuntimeException('Unable to update contact.');
+        } catch (Throwable $th) {
+            throw new RuntimeException($th->getMessage());
         }
     }
 }
