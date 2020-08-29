@@ -32,7 +32,7 @@ class AddContactController
         $executionParams = $this->request->getParsedBody();
         return [
             "name" => new PersonName($executionParams['name']),
-            "nick" => new Nickname($executionParams['nick']),
+            "nickname" => new Nickname($executionParams['nickname']),
             "phone" => new PhoneNumber($executionParams['phone'])
         ];
     }
@@ -44,24 +44,21 @@ class AddContactController
 
         try {
             $params = $this->getExecutionParams();
-            $contactId = $addContact->action(
+            $addContact->action(
                 $params['name'],
-                $params['nick'],
+                $params['nickname'],
                 $params['phone']
             );
-
+        } catch (Throwable $th) {
             $this->response->getBody()->write(
-                'User created successfully with ID "' . $contactId . '".'
+                'User creation failed! Details: "' . $th->getMessage() . '"'
             );
-            $responseCode = 200;
-        } catch (Throwable $e) {
-            $this->response->getBody()->write(
-                'User creation failed!' . PHP_EOL
-                . 'Please verify if you sent a valid name, nick and phone.'
-            );
-            $responseCode = 400;
+            return $this->response->withStatus(400);
         }
 
-        return $this->response->withStatus($responseCode);
+        $this->response->getBody()->write(
+            'User created successfully!'
+        );
+        return $this->response->withStatus(200);
     }
 }

@@ -18,7 +18,7 @@ class UpdateContactInteractor
         $this->commandRepo = $commandRepo;
     }
 
-    public function action(Contact $updatedContact): bool
+    public function action(Contact $updatedContact): void
     {
         $this->commandRepo->removeContact($updatedContact->getId());
         $this->commandRepo->addContact(
@@ -26,6 +26,5 @@ class UpdateContactInteractor
             $updatedContact->getNickname(),
             $updatedContact->getPhone()
         );
-        return true;
     }
 }

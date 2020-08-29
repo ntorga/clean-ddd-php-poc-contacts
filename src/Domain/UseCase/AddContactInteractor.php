@@ -24,19 +24,18 @@ class AddContactInteractor
 
     public function action(
         PersonName $name,
-        Nickname $nick,
+        Nickname $nickname,
         PhoneNumber $phone
-    ): bool
+    ): void
     {
         try {
             $this->commandRepo->addContact(
                 $name,
-                $nick,
+                $nickname,
                 $phone
             );
         } catch (Throwable $e) {
             throw new RuntimeException('Unable to create contact.');
         }
-        return true;
     }
 }

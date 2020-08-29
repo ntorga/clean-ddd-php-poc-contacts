@@ -20,13 +20,12 @@ class RemoveContactInteractor
         $this->commandRepo = $commandRepo;
     }
 
-    public function action(ContactId $contactId): bool
+    public function action(ContactId $contactId): void
     {
         try {
             $this->commandRepo->removeContact($contactId);
         } catch (Throwable $e) {
             throw new RuntimeException('Unable to remove contact.');
         }
-        return true;
     }
 }
