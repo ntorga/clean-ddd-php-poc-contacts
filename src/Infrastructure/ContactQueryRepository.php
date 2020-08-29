@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
-use App\Domain\Entity\Contact;
 use App\Domain\Repository\ContactQueryRepositoryInterface;
-use App\Domain\ValueObject\ContactId;
-use App\Domain\ValueObject\Nickname;
-use App\Domain\ValueObject\PersonName;
-use App\Domain\ValueObject\PhoneNumber;
 use JsonException;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\FileNotFoundException;
@@ -45,7 +40,7 @@ class ContactQueryRepository implements ContactQueryRepositoryInterface
         return $contactFiles;
     }
 
-    private function loadContactFromFile(string $contactFile): Contact
+    private function loadContactFromFile(string $contactFile): array
     {
         try {
             $contactFileContent = $this->contactsDir->read($contactFile);
@@ -63,12 +58,7 @@ class ContactQueryRepository implements ContactQueryRepositoryInterface
             throw new RuntimeException('Contact data invalid.');
         }
 
-        return new Contact(
-            new ContactId((int)$contactRaw["id"]),
-            new PersonName($contactRaw["name"]),
-            new Nickname($contactRaw["nickname"]),
-            new PhoneNumber($contactRaw["phone"])
-        );
+        return $contactRaw;
     }
 
     public function getContacts(): array

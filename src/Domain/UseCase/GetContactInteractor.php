@@ -20,9 +20,10 @@ class GetContactInteractor
         $this->queryRepo = $queryRepo;
     }
 
-    public function getContact(ContactId $contactId): Contact
+    public function action(ContactId $contactId): Contact
     {
-        $contacts = $this->queryRepo->getContacts();
+        $getContacts = new GetContactsInteractor($this->queryRepo);
+        $contacts = $getContacts->action();
         foreach ($contacts as $contact) {
             $isContact = $contact->getId()->getId() === $contactId->getId();
             if ($isContact) {

@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Tests\Infrastructure;
+namespace Tests\Domain\UseCase;
 
+use App\Domain\UseCase\GetContactsInteractor;
 use App\Infrastructure\ContactQueryRepository;
 use PHPUnit\Framework\TestCase;
 use Tests\LoadEnvsTrait;
 
-class ContactQueryRepositoryTest extends TestCase
+class GetContactsInteractorTest extends TestCase
 {
     use LoadEnvsTrait;
-
-    private ContactQueryRepository $queryRepo;
 
     public function setUp(): void
     {
         $this->loadEnvs();
-        $this->queryRepo = new ContactQueryRepository();
     }
 
     public function testGetContacts(): void
     {
-        $sut = $this->queryRepo->getContacts();
+        $queryRepo = new ContactQueryRepository();
+        $getContacts = new GetContactsInteractor($queryRepo);
+        $sut = $getContacts->action();
         self::assertIsArray($sut);
     }
 }
