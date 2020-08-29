@@ -44,6 +44,12 @@ class AddContactController
 
         try {
             $params = $this->getExecutionParams();
+        } catch (Throwable $th) {
+            $this->response->getBody()->write($th->getMessage());
+            return $this->response->withStatus(400);
+        }
+
+        try {
             $addContact->action(
                 $params['name'],
                 $params['nickname'],
@@ -51,13 +57,13 @@ class AddContactController
             );
         } catch (Throwable $th) {
             $this->response->getBody()->write(
-                'User creation failed! Details: "' . $th->getMessage() . '"'
+                'Contact creation failed! Details: "' . $th->getMessage() . '"'
             );
-            return $this->response->withStatus(400);
+            return $this->response->withStatus(500);
         }
 
         $this->response->getBody()->write(
-            'User created successfully!'
+            'Contact created successfully!'
         );
         return $this->response->withStatus(200);
     }
