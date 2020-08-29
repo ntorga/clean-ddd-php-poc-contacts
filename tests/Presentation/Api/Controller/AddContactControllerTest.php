@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\Presentation\Api\Controller;
 
-use App\Domain\UseCase\RemoveContactInteractor;
-use App\Domain\ValueObject\ContactId;
-use App\Infrastructure\ContactCommandRepository;
 use App\Presentation\Api\Controller\AddContactController;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Tests\HttpTestTrait;
+use Tests\InteractorTrait;
 use Tests\LoadEnvsTrait;
 
 class AddContactControllerTest extends TestCase
 {
     use LoadEnvsTrait;
     use HttpTestTrait;
+    use InteractorTrait;
 
     private ServerRequestInterface $request;
     private Response $response;
@@ -47,8 +46,7 @@ class AddContactControllerTest extends TestCase
         );
         $result = $addContact->action();
         self::assertEquals(200, $result->getStatusCode());
-        $commandRepo = new ContactCommandRepository();
-        $removeContact = new RemoveContactInteractor($commandRepo);
-        $removeContact->action(new ContactId(1));
+
+        $this->removeContact();
     }
 }
