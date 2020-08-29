@@ -63,7 +63,9 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
         try {
             $this->contactsDir->delete($contactFileName);
         } catch (FileNotFoundException $e) {
-            throw new RuntimeException('Contact ID provided does not exist.');
+            if ($this->contactsDir->has($contactFileName)) {
+                throw new RuntimeException('Unable to delete contact.');
+            }
         }
     }
 }

@@ -24,8 +24,10 @@ class RemoveContactInteractor
     {
         try {
             $this->commandRepo->removeContact($contactId);
-        } catch (Throwable $e) {
-            throw new RuntimeException('Unable to remove contact.');
+        } catch (Throwable $th) {
+            throw new RuntimeException(
+                'Unable to remove contact: ' . $th->getMessage()
+            );
         }
     }
 }

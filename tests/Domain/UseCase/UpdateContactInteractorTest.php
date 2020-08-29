@@ -36,8 +36,8 @@ class UpdateContactInteractorTest extends TestCase
     public function testUpdateContact(): void
     {
         $contactId = new ContactId(1);
-        $addContantInteractor = new AddContactInteractor($this->commandRepo);
-        $addContantInteractor->action(
+        $addContactInteractor = new AddContactInteractor($this->commandRepo);
+        $addContactInteractor->action(
             new PersonName('Jane Doe'),
             new Nickname('Jane'),
             new PhoneNumber('555-2368')
