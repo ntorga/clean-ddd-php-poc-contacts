@@ -1,0 +1,10 @@
+# NGINX
+FROM nginx
+RUN rm -f /etc/nginx/nginx.conf
+COPY /docker/nginx.conf /etc/nginx/nginx.conf
+RUN mkdir -p /etc/nginx/ssl/
+RUN openssl req -new -newkey rsa:4096 -days 1825 -nodes -x509 \
+    -subj "/C=US/ST=California/L=Los Angeles/O=ACME Company/CN=contacts.api.poc.tld" \
+    -keyout /etc/nginx/ssl/ssl.key -out /etc/nginx/ssl/ssl.cert
+COPY /docker/dhparam.pem /etc/nginx/ssl/dhparam.pem
+EXPOSE 443
