@@ -10,11 +10,32 @@ use App\Domain\ValueObject\PersonName;
 use App\Domain\ValueObject\PhoneNumber;
 use JsonSerializable;
 
+/**
+ * @OA\Schema(
+ *   title="Contact",
+ *   required={"id", "name", "nickname", "phone"}
+ * )
+ */
 class Contact implements JsonSerializable
 {
+    /**
+     * @OA\Property(type="integer", format="int32")
+     */
     private ContactId $id;
+
+    /**
+     * @OA\Property(type="string")
+     */
     private PersonName $name;
+
+    /**
+     * @OA\Property(type="string")
+     */
     private Nickname $nickname;
+
+    /**
+     * @OA\Property(type="string")
+     */
     private PhoneNumber $phone;
 
     public function __construct(

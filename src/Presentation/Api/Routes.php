@@ -35,7 +35,57 @@ return static function (App $app) {
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, HEAD, OPTIONS');
     });
 
+    /**
+     * @OA\Info(
+     *   title="Contact Manager API", version="1.0",
+     *   description="A simple contact manager API to demonstrate the concepts
+    of Clean Architecture and DDD with PHP 7.4+.",
+     *   version="1.0",
+     *   @OA\Contact(
+     *     email="northontorga+github@gmail.com"
+     *   ),
+     *   @OA\License(
+     *     name="Apache 2.0",
+     *     url="http://www.apache.org/licenses/LICENSE-2.0.html"
+     *   )
+     * )
+     * @OA\Server(
+     *   url="https://myproductionserver.com",
+     *   description="Production server"
+     * )
+     * @OA\Server(
+     *   url="https://localhost",
+     *   description="Development environment"
+     * )
+     */
+
+    /**
+     * @OA\Tag(
+     *    name="contact",
+     *    description="Operations about Contacts",
+     *    @OA\ExternalDocumentation(
+     *      description="Find out more",
+     *      url="https://ntorga.com"
+     *    )
+     *  )
+     */
+
     $app->group('/v1/contact', static function (RouteCollectorProxy $group) {
+
+        /**
+         * @OA\Get(
+         *   path="/v1/contact",
+         *   tags={"contact"},
+         *   @OA\Response(
+         *     response="200",
+         *     description="All contacts.",
+         *     @OA\JsonContent(
+         *       type="array",
+         *       @OA\Items(ref="#/components/schemas/Contact")
+         *     )
+         *   )
+         * )
+         */
         $group->get('', static function (
             Request $request,
             Response $response
@@ -43,6 +93,17 @@ return static function (App $app) {
             return (new GetContactsController($response))->action();
         });
 
+        /**
+         * @OA\Post(
+         *   path="/v1/contact",
+         *   tags={"contact"},
+         *   requestBody={"$ref": "#/components/requestBodies/ContactBody"},
+         *   @OA\Response(
+         *      response="200",
+         *      description="Contact created successfully!"
+         *   )
+         * )
+         */
         $group->post('', static function (
             Request $request,
             Response $response
@@ -50,6 +111,27 @@ return static function (App $app) {
             return (new AddContactController($request, $response))->action();
         });
 
+        /**
+         * @OA\Get(
+         *   path="/v1/contact/{id}",
+         *   @OA\Parameter(
+         *     name="id",
+         *     in="path",
+         *     description="ID of the contact",
+         *     required=true,
+         *     @OA\Schema(
+         *       type="integer",
+         *       format="int32"
+         *     )
+         *   ),
+         *   tags={"contact"},
+         *   @OA\Response(
+         *     response="200",
+         *     description="Contact requested.",
+         *     @OA\JsonContent(ref="#/components/schemas/Contact")
+         *   )
+         * )
+         */
         $group->get('/{id:[0-9]+}', static function (
             Request $request,
             Response $response,
@@ -58,6 +140,27 @@ return static function (App $app) {
             return (new GetContactController($response, $args))->action();
         });
 
+        /**
+         * @OA\Put(
+         *   path="/v1/contact/{id}",
+         *   @OA\Parameter(
+         *     name="id",
+         *     in="path",
+         *     description="ID of the contact",
+         *     required=true,
+         *     @OA\Schema(
+         *       type="integer",
+         *       format="int32"
+         *     )
+         *   ),
+         *   tags={"contact"},
+         *   requestBody={"$ref": "#/components/requestBodies/ContactBody"},
+         *   @OA\Response(
+         *      response="200",
+         *      description="Contact updated successfully!"
+         *   )
+         * )
+         */
         $group->put('/{id:[0-9]+}', static function (
             Request $request,
             Response $response,
@@ -70,6 +173,26 @@ return static function (App $app) {
             ))->action();
         });
 
+        /**
+         * @OA\Delete(
+         *   path="/v1/contact/{id}",
+         *   @OA\Parameter(
+         *     name="id",
+         *     in="path",
+         *     description="ID of the contact",
+         *     required=true,
+         *     @OA\Schema(
+         *       type="integer",
+         *       format="int32"
+         *     )
+         *   ),
+         *   tags={"contact"},
+         *   @OA\Response(
+         *      response="200",
+         *      description="Contact removed successfully!"
+         *   )
+         * )
+         */
         $group->delete('/{id:[0-9]+}', static function (
             Request $request,
             Response $response,
