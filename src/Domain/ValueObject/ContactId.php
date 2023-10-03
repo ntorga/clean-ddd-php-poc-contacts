@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject;
 
+use DomainException;
 use JsonSerializable;
-use RuntimeException;
 
 class ContactId implements JsonSerializable
 {
@@ -14,13 +14,12 @@ class ContactId implements JsonSerializable
     public function __construct(int $contactId)
     {
         $isOutOfRange = filter_var(
-                $contactId,
-                FILTER_VALIDATE_INT,
-                array('options' => array('min_range' => 1, 'max_range' => 50000))
-            ) === FALSE;
-
+            $contactId,
+            FILTER_VALIDATE_INT,
+            array('options' => array('min_range' => 1, 'max_range' => 50000))
+        ) === FALSE;
         if ($isOutOfRange) {
-            throw new RuntimeException('Contact ID out of range.');
+            throw new DomainException('ContactIdOutOfRange');
         }
 
         $this->contactId = $contactId;
