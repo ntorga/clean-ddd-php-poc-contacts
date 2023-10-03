@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\ValueObject;
 
+use DomainException;
 use JsonSerializable;
-use RuntimeException;
 
 class PhoneNumber implements JsonSerializable
 {
@@ -13,18 +13,10 @@ class PhoneNumber implements JsonSerializable
 
     public function __construct(string $phoneNumber)
     {
-        $validLength = strlen($phoneNumber) < 30;
-        if (!$validLength) {
-            throw new RuntimeException(
-                'Phone numbers must have a maximum of 30 numbers.'
-            );
-        }
-
-        $expectedFormat = "/^(\(\d{3}\)\s|\d{3}-)?\d{3}-\d{4}$/";
+        // Valid formats: (123) 1234-1234 | 123 1234-1234 | 1231234-1234 | 12312341234
+        $expectedFormat = "/^\(?\d{1,3}\)? ?\d{1,5}-?\d{1,5}$/";
         if (!preg_match($expectedFormat, $phoneNumber)) {
-            throw new RuntimeException(
-                'Phone number provided must follow US format.'
-            );
+            throw new DomainException('InvalidPhoneNumber');
         }
 
         $this->phoneNumber = $phoneNumber;
