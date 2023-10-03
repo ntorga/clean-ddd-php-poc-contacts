@@ -14,8 +14,8 @@ class PhoneNumber implements JsonSerializable
     public function __construct(string $phoneNumber)
     {
         // Valid formats: (123) 1234-1234 | 123 1234-1234 | 1231234-1234 | 12312341234
-        $expectedFormat = "/^\(?\d{1,3}\)? ?\d{1,5}-?\d{1,5}$/";
-        if (!preg_match($expectedFormat, $phoneNumber)) {
+        $phoneRegex = "/^\(?\d{1,3}\)? ?\d{1,5}-?\d{1,5}$/";
+        if (!preg_match($phoneRegex, $phoneNumber)) {
             throw new DomainException('InvalidPhoneNumber');
         }
 
