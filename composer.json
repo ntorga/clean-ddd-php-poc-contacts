@@ -1,6 +1,6 @@
 {
   "name": "ntorga/clean-ddd-php-poc-contacts",
-  "description": "A simple contact manager API to demonstrate the concepts of Clean Architecture and DDD with PHP 7.4+.",
+  "description": "A simple contact manager API to demonstrate the concepts of Clean Architecture and DDD with PHP 8.2+.",
   "authors": [
     {
       "name": "Northon Torga",
@@ -14,23 +14,24 @@
     }
   },
   "require": {
-    "php": "^7.4.4",
-    "slim/slim": "^4.0",
-    "slim/psr7": "^1.1",
-    "vlucas/phpdotenv": "^5.1",
-    "league/flysystem": "^1.1",
-    "ext-json": "*",
-    "zircote/swagger-php": "^3.0"
+    "php": "^8.2.10",
+    "slim/slim": "^4.12",
+    "slim/psr7": "^1.6",
+    "vlucas/phpdotenv": "^5.5",
+    "league/flysystem": "^3.16",
+    "zircote/swagger-php": "^4.7"
   },
   "require-dev": {
-    "roave/security-advisories": "dev-master",
-    "phpunit/phpunit": "^9",
-    "phpstan/phpstan": "^0.12.25",
-    "phpstan/phpstan-phpunit": "^0.12.8",
-    "phpstan/phpstan-strict-rules": "^0.12.2",
-    "phpstan/extension-installer": "^1.0",
-    "phpstan/phpstan-beberlei-assert": "^0.12.2",
-    "phpstan/phpstan-deprecation-rules": "^0.12.2",
-    "ekino/phpstan-banned-code": "^0.3.1"
+    "phpunit/phpunit": "^10.3",
+    "phpstan/phpstan": "^1.10",
+    "phpstan/phpstan-strict-rules": "^1.5",
+    "phpstan/extension-installer": "^1.3",
+    "phpstan/phpstan-beberlei-assert": "^1.1",
+    "phpstan/phpstan-deprecation-rules": "^1.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "phpstan/extension-installer": true
+    }
   }
 }
