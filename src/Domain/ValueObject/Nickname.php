@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\ValueObject;
 
 use JsonSerializable;
-use RuntimeException;
+use DomainException;
 
 class Nickname implements JsonSerializable
 {
@@ -13,20 +13,9 @@ class Nickname implements JsonSerializable
 
     public function __construct(string $nickname)
     {
-        $validLength = strlen($nickname) < 20;
-        if (!$validLength) {
-            throw new RuntimeException(
-                'Nickname cannot be longer than 20 characters.'
-            );
-        }
-
-        $onlyValidChars = ctype_alnum(
-                str_replace(' ', '', $nickname)
-            ) === TRUE;
-        if (!$onlyValidChars) {
-            throw new RuntimeException(
-                'Only alphanumeric characters are allowed on Nickname.'
-            );
+        $nameRegex = "/^[\p{L}]{1,100}$/";
+        if (!preg_match($nameRegex, $nickname)) {
+            throw new DomainException('InvalidNickname');
         }
 
         $this->nickname = $nickname;
