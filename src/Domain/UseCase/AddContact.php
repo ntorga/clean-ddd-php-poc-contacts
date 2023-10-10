@@ -22,7 +22,7 @@ class AddContact
     public function action(AddContactDto $addContact): void
     {
         try {
-            $this->commandRepo->addContact($addContact);
+            $this->commandRepo->add($addContact);
         } catch (Throwable $e) {
             error_log($e->getMessage());
             throw new RuntimeException('AddContactInfraError');
