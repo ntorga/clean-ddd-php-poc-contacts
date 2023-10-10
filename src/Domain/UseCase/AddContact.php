@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Domain\UseCase;
 
-use App\Domain\Dto\AddContact;
+use App\Domain\Dto\AddContact as AddContactDto;
 use App\Domain\Repository\ContactCommandRepositoryInterface;
-use App\Domain\ValueObject\Nickname;
-use App\Domain\ValueObject\PersonName;
-use App\Domain\ValueObject\PhoneNumber;
 use RuntimeException;
 use Throwable;
 
-class AddContactInteractor
+class AddContact
 {
     private ContactCommandRepositoryInterface $commandRepo;
 
@@ -22,7 +19,7 @@ class AddContactInteractor
         $this->commandRepo = $commandRepo;
     }
 
-    public function action(AddContact $addContact): void
+    public function action(AddContactDto $addContact): void
     {
         try {
             $this->commandRepo->addContact($addContact);
