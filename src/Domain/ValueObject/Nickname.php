@@ -13,7 +13,7 @@ class Nickname implements JsonSerializable
 
     public function __construct(string $nickname)
     {
-        $nicknameRegex = "/^[\p{L}]{1,100}$/";
+        $nicknameRegex = "/^[\p{L}_-]{1,100}$/";
         if (!preg_match($nicknameRegex, $nickname)) {
             throw new DomainException('InvalidNickname');
         }
