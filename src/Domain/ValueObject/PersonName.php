@@ -13,7 +13,7 @@ class PersonName implements JsonSerializable
 
     public function __construct(string $personName)
     {
-        $nameRegex = "/^[\p{L} ]{1,100}$/";
+        $nameRegex = "/^[\p{L} ]{1,100}$/u";
         if (!preg_match($nameRegex, $personName)) {
             throw new DomainException('InvalidPersonName');
         }
