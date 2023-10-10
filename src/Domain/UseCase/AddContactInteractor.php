@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\UseCase;
 
+use App\Domain\Dto\AddContact;
 use App\Domain\Repository\ContactCommandRepositoryInterface;
 use App\Domain\ValueObject\Nickname;
 use App\Domain\ValueObject\PersonName;
@@ -17,25 +18,17 @@ class AddContactInteractor
 
     public function __construct(
         ContactCommandRepositoryInterface $commandRepo
-    )
-    {
+    ) {
         $this->commandRepo = $commandRepo;
     }
 
-    public function action(
-        PersonName $name,
-        Nickname $nickname,
-        PhoneNumber $phone
-    ): void
+    public function action(AddContact $addContact): void
     {
         try {
-            $this->commandRepo->addContact(
-                $name,
-                $nickname,
-                $phone
-            );
+            $this->commandRepo->addContact($addContact);
         } catch (Throwable $e) {
-            throw new RuntimeException('Unable to create contact.');
+            error_log($e->getMessage());
+            throw new RuntimeException('AddContactInfraError');
         }
     }
 }
