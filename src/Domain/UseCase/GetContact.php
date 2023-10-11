@@ -10,7 +10,7 @@ use App\Domain\ValueObject\ContactId;
 use RuntimeException;
 use Throwable;
 
-class GetContactInteractor
+class GetContact
 {
     private ContactQueryRepositoryInterface $queryRepo;
 
