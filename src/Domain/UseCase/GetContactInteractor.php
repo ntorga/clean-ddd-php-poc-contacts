@@ -8,6 +8,7 @@ use App\Domain\Entity\Contact;
 use App\Domain\Repository\ContactQueryRepositoryInterface;
 use App\Domain\ValueObject\ContactId;
 use RuntimeException;
+use Throwable;
 
 class GetContactInteractor
 {
@@ -15,21 +16,24 @@ class GetContactInteractor
 
     public function __construct(
         ContactQueryRepositoryInterface $queryRepo
-    )
-    {
+    ) {
         $this->queryRepo = $queryRepo;
     }
 
     public function action(ContactId $contactId): Contact
     {
-        $getContacts = new GetContactsInteractor($this->queryRepo);
-        $contacts = $getContacts->action();
-        foreach ($contacts as $contact) {
-            $isContact = $contact->getId()->getId() === $contactId->getId();
-            if ($isContact) {
-                return $contact;
+        try {
+            $contact = $this->queryRepo->getById($contactId);
+        } catch (Throwable $e) {
+            $errorMessage = $e->getMessage();
+            if ($errorMessage === 'ContactNotFound') {
+                throw new RuntimeException('ContactNotFound');
             }
+
+            error_log($errorMessage);
+            throw new RuntimeException('GetContactInfraError');
         }
-        throw new RuntimeException('Contact ID not found.');
+
+        return $contact;
     }
 }
