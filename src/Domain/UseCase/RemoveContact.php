@@ -22,11 +22,10 @@ class RemoveContact
     public function action(ContactId $contactId): void
     {
         try {
-            $this->commandRepo->removeContact($contactId);
+            $this->commandRepo->remove($contactId);
         } catch (Throwable $th) {
-            throw new RuntimeException(
-                'Unable to remove contact: ' . $th->getMessage()
-            );
+            error_log($th->getMessage());
+            throw new RuntimeException('RemoveContactInfraError');
         }
     }
 }
