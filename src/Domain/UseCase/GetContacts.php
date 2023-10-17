@@ -8,7 +8,7 @@ use App\Domain\Repository\ContactQueryRepositoryInterface;
 use RuntimeException;
 use Throwable;
 
-class GetContactsInteractor
+class GetContacts
 {
     private ContactQueryRepositoryInterface $queryRepo;
 
