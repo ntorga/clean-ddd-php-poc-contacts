@@ -9,14 +9,13 @@ use App\Domain\Repository\ContactCommandRepositoryInterface;
 use RuntimeException;
 use Throwable;
 
-class UpdateContactInteractor
+class UpdateContact
 {
     private ContactCommandRepositoryInterface $commandRepo;
 
     public function __construct(
         ContactCommandRepositoryInterface $commandRepo
-    )
-    {
+    ) {
         $this->commandRepo = $commandRepo;
     }
 
