@@ -23,8 +23,8 @@ class AddContact
     {
         try {
             $this->commandRepo->add($addContact);
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
+        } catch (Throwable $th) {
+            error_log($th->getMessage());
             throw new RuntimeException('AddContactInfraError');
         }
     }

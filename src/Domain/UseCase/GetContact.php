@@ -24,8 +24,8 @@ class GetContact
     {
         try {
             $contact = $this->queryRepo->getById($contactId);
-        } catch (Throwable $e) {
-            $errorMessage = $e->getMessage();
+        } catch (Throwable $th) {
+            $errorMessage = $th->getMessage();
             if ($errorMessage === 'ContactNotFound') {
                 throw new RuntimeException('ContactNotFound');
             }

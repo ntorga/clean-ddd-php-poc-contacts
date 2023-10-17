@@ -22,8 +22,8 @@ class GetContacts
     {
         try {
             return $this->queryRepo->get();
-        } catch (Throwable $e) {
-            error_log($e->getMessage());
+        } catch (Throwable $th) {
+            error_log($th->getMessage());
             throw new RuntimeException('GetContactsInfraError');
         }
     }
