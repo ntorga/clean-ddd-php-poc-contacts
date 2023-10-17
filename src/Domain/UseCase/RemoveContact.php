@@ -9,14 +9,13 @@ use App\Domain\ValueObject\ContactId;
 use RuntimeException;
 use Throwable;
 
-class RemoveContactInteractor
+class RemoveContact
 {
     private ContactCommandRepositoryInterface $commandRepo;
 
     public function __construct(
         ContactCommandRepositoryInterface $commandRepo
-    )
-    {
+    ) {
         $this->commandRepo = $commandRepo;
     }
 
