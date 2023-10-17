@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Domain\UseCase;
 
-use App\Domain\Entity\Contact;
 use App\Domain\Repository\ContactCommandRepositoryInterface;
+use App\Domain\Dto\UpdateContact as UpdateContactDto;
 use RuntimeException;
 use Throwable;
 
@@ -19,12 +19,13 @@ class UpdateContact
         $this->commandRepo = $commandRepo;
     }
 
-    public function action(Contact $updatedContact): void
+    public function action(UpdateContactDto $updatedContact): void
     {
         try {
-            $this->commandRepo->updateContact($updatedContact);
+            $this->commandRepo->update($updatedContact);
         } catch (Throwable $th) {
-            throw new RuntimeException($th->getMessage());
+            error_log($th->getMessage());
+            throw new RuntimeException('UpdateContactInfraError');
         }
     }
 }
