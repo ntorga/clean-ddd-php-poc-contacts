@@ -15,7 +15,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Throwable;
 
-class UpdateContactController
+class UpdateContact
 {
     private Request $request;
     private Response $response;
@@ -25,8 +25,7 @@ class UpdateContactController
         Request $request,
         Response $response,
         array $args
-    )
-    {
+    ) {
         $this->request = $request;
         $this->response = $response;
         $this->args = $args;

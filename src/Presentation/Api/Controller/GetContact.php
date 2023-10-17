@@ -10,7 +10,7 @@ use App\Infrastructure\ContactQueryRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Throwable;
 
-class GetContactController
+class GetContact
 {
     private Response $response;
     private array $args;
@@ -18,8 +18,7 @@ class GetContactController
     public function __construct(
         Response $response,
         array $args
-    )
-    {
+    ) {
         $this->response = $response;
         $this->args = $args;
     }

@@ -9,7 +9,7 @@ use App\Infrastructure\ContactQueryRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Throwable;
 
-class GetContactsController
+class GetContacts
 {
     private Response $response;
 
