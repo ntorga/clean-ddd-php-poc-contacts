@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Api\Controller;
 
+use App\Domain\Dto\AddContact as AddContactDto;
 use App\Domain\UseCase\AddContactInteractor;
 use App\Domain\ValueObject\Nickname;
 use App\Domain\ValueObject\PersonName;
@@ -26,27 +27,32 @@ class AddContact
         $this->response = $response;
     }
 
-    private function getExecutionParams(): array
-    {
-        $executionParams = $this->request->getParsedBody();
-        return [
-            "name" => new PersonName($executionParams['name']),
-            "nickname" => new Nickname($executionParams['nickname']),
-            "phone" => new PhoneNumber($executionParams['phone'])
-        ];
-    }
-
     public function action(): Response
     {
-        $contactCommandRepo = new ContactCommandRepository();
-        $addContact = new AddContactInteractor($contactCommandRepo);
+        $executionParams = $this->request->getParsedBody();
+        $requiredParams = ['name', 'nickname', 'phone'];
+        foreach ($requiredParams as $param) {
+            if (!isset($executionParams[$param])) {
+                $this->response->getBody()->write(
+                    'Missing required parameter: ' . $param
+                );
+                return $this->response->withStatus(400);
+            }
+        }
 
         try {
-            $params = $this->getExecutionParams();
+            $addContactDto = new AddContactDto(
+                new PersonName($executionParams['name']),
+                new Nickname($executionParams['nickname']),
+                new PhoneNumber($executionParams['phone']),
+            );
         } catch (Throwable $th) {
             $this->response->getBody()->write($th->getMessage());
             return $this->response->withStatus(400);
         }
+
+        $contactCommandRepo = new ContactCommandRepository();
+        $addContact = new AddContactInteractor($contactCommandRepo);
 
         try {
             $addContact->action(
