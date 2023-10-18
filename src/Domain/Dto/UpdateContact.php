@@ -41,7 +41,7 @@ class UpdateContact
         ContactId $id,
         ?PersonName $name = null,
         ?Nickname $nickname = null,
-        ?PhoneNumber $phone = null,
+        ?PhoneNumber $phone = null
     ) {
         $this->id = $id;
         $this->name = $name;
