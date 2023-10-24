@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Api\Controller;
 
-use App\Domain\UseCase\GetContactsInteractor;
+use App\Domain\UseCase\GetContacts as GetContactsUseCase;
 use App\Infrastructure\ContactQueryRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Throwable;
@@ -21,16 +21,18 @@ class GetContacts
     public function action(): Response
     {
         $queryRepo = new ContactQueryRepository();
-        $getContacts = new GetContactsInteractor($queryRepo);
+        $getContacts = new GetContactsUseCase($queryRepo);
 
         try {
-            $contacts = json_encode($getContacts->action(), JSON_THROW_ON_ERROR);
+            $contactEntities = $getContacts->action();
         } catch (Throwable $th) {
             $this->response->getBody()->write($th->getMessage());
             return $this->response->withStatus(500);
         }
 
-        $this->response->getBody()->write($contacts);
+        $encodedEntities = json_encode($contactEntities, JSON_THROW_ON_ERROR);
+
+        $this->response->getBody()->write($encodedEntities);
         return $this->response->withStatus(200);
     }
 }
