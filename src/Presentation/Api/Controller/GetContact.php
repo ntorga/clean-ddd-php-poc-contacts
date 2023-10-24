@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presentation\Api\Controller;
 
-use App\Domain\UseCase\GetContactInteractor;
+use App\Domain\UseCase\GetContact as GetContactUseCase;
 use App\Domain\ValueObject\ContactId;
 use App\Infrastructure\ContactQueryRepository;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -23,27 +23,30 @@ class GetContact
         $this->args = $args;
     }
 
-    private function getContactId(): ContactId
-    {
-        return new ContactId((int)$this->args["id"]);
-    }
-
     public function action(): Response
     {
+        try {
+            $contactId = new ContactId((int)$this->args["id"]);
+        } catch (Throwable $th) {
+            $this->response->getBody()->write($th->getMessage());
+            return $this->response->withStatus(400);
+        }
+
         $queryRepo = new ContactQueryRepository();
-        $getContact = new GetContactInteractor($queryRepo);
+        $getContact = new GetContactUseCase($queryRepo);
 
         try {
-            $contact = json_encode(
-                $getContact->action($this->getContactId()),
-                JSON_THROW_ON_ERROR
-            );
+            $contactEntity = $getContact->action($contactId);
         } catch (Throwable $th) {
             $this->response->getBody()->write($th->getMessage());
             return $this->response->withStatus(500);
         }
 
-        $this->response->getBody()->write($contact);
+        $encodedEntity = json_encode(
+            $contactEntity,
+            JSON_THROW_ON_ERROR
+        );
+        $this->response->getBody()->write($encodedEntity);
         return $this->response->withStatus(200);
     }
 }
