@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Presentation\Api\Controller;
 
 use App\Domain\Dto\AddContact as AddContactDto;
-use App\Domain\UseCase\AddContactInteractor;
+use App\Domain\UseCase\AddContact as AddContactUseCase;
 use App\Domain\ValueObject\Nickname;
 use App\Domain\ValueObject\PersonName;
 use App\Domain\ValueObject\PhoneNumber;
@@ -52,24 +52,16 @@ class AddContact
         }
 
         $contactCommandRepo = new ContactCommandRepository();
-        $addContact = new AddContactInteractor($contactCommandRepo);
+        $addContact = new AddContactUseCase($contactCommandRepo);
 
         try {
-            $addContact->action(
-                $params['name'],
-                $params['nickname'],
-                $params['phone']
-            );
+            $addContact->action($addContactDto);
         } catch (Throwable $th) {
-            $this->response->getBody()->write(
-                'Contact creation failed: ' . $th->getMessage()
-            );
+            $this->response->getBody()->write($th->getMessage());
             return $this->response->withStatus(500);
         }
 
-        $this->response->getBody()->write(
-            'Contact created successfully!'
-        );
-        return $this->response->withStatus(200);
+        $this->response->getBody()->write('ContactCreated');
+        return $this->response->withStatus(201);
     }
 }
