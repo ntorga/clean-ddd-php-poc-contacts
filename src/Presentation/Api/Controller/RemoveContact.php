@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Presentation\Api\Controller;
 
-use App\Domain\UseCase\RemoveContactInteractor;
+use App\Domain\UseCase\RemoveContact as RemoveContactUseCase;
 use App\Domain\ValueObject\ContactId;
 use App\Infrastructure\ContactCommandRepository;
+use App\Infrastructure\ContactQueryRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Throwable;
 
@@ -23,24 +24,33 @@ class RemoveContact
         $this->args = $args;
     }
 
-    private function getContactId(): ContactId
-    {
-        return new ContactId((int)$this->args["id"]);
-    }
-
     public function action(): Response
     {
-        $contactCommandRepo = new ContactCommandRepository();
-        $removeContact = new RemoveContactInteractor($contactCommandRepo);
-
         try {
-            $removeContact->action($this->getContactId());
+            $contactId = new ContactId((int)$this->args["id"]);
         } catch (Throwable $th) {
             $this->response->getBody()->write($th->getMessage());
             return $this->response->withStatus(400);
         }
 
-        $this->response->getBody()->write('Contact removed successfully!');
+        $queryRepo = new ContactQueryRepository();
+        $commandRepo = new ContactCommandRepository();
+        $removeContact = new RemoveContactUseCase($queryRepo, $commandRepo);
+
+        try {
+            $removeContact->action($contactId);
+        } catch (Throwable $th) {
+            $errorMessage = $th->getMessage();
+            $statusCode = 500;
+            if ($errorMessage === 'ContactNotFound') {
+                $statusCode = 404;
+            }
+
+            $this->response->getBody()->write($errorMessage);
+            return $this->response->withStatus($statusCode);
+        }
+
+        $this->response->getBody()->write('ContactRemoved');
         return $this->response->withStatus(200);
     }
 }
