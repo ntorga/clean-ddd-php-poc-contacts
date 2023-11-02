@@ -15,8 +15,7 @@ class JsonResponseMiddleware
     public function __invoke(
         Request $request,
         RequestHandler $handler
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         $response = $handler->handle($request);
 
         try {
@@ -30,15 +29,22 @@ class JsonResponseMiddleware
             $originalBody = (string)$response->getBody();
         }
 
+        $responseCode = $response->getStatusCode();
+
         try {
-            $newBody = json_encode($originalBody, JSON_THROW_ON_ERROR);
+            $encodedOriginalBody = json_encode($originalBody, JSON_THROW_ON_ERROR);
+            $encodedNewBody = json_encode([
+                "status" => $responseCode,
+                "body" => $encodedOriginalBody,
+            ]);
         } catch (JsonException $e) {
             return $response;
         }
 
-        $modifiedResponse = $response->withBody(
-            (new StreamFactory())->createStream($newBody)
-        );
-        return $modifiedResponse->withHeader('Content-Type', 'application/json');
+        $newResponseBody = (new StreamFactory())->createStream($encodedNewBody);
+
+        return $response
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody($newResponseBody);
     }
 }
