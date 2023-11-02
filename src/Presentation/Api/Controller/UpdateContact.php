@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Presentation\Api\Controller;
 
-use App\Domain\Entity\Contact;
-use App\Domain\UseCase\UpdateContactInteractor;
+use App\Domain\Dto\UpdateContact as UpdateContactDto;
+use App\Domain\UseCase\UpdateContact as UpdateContactUseCase;
 use App\Domain\ValueObject\ContactId;
 use App\Domain\ValueObject\Nickname;
 use App\Domain\ValueObject\PersonName;
@@ -19,60 +19,66 @@ class UpdateContact
 {
     private Request $request;
     private Response $response;
-    private array $args;
 
     public function __construct(
         Request $request,
         Response $response,
-        array $args
     ) {
         $this->request = $request;
         $this->response = $response;
-        $this->args = $args;
-    }
-
-    private function getExecutionParams(): array
-    {
-        $executionParams = $this->request->getParsedBody();
-        return [
-            "id" => new ContactId((int)$this->args['id']),
-            "name" => new PersonName($executionParams['name']),
-            "nickname" => new Nickname($executionParams['nickname']),
-            "phone" => new PhoneNumber($executionParams['phone'])
-        ];
     }
 
     public function action(): Response
     {
-        $contactCommandRepo = new ContactCommandRepository();
-        $updateContact = new UpdateContactInteractor($contactCommandRepo);
+        $executionParams = $this->request->getParsedBody();
+        $requiredParams = ['id'];
+        foreach ($requiredParams as $param) {
+            if (!isset($executionParams[$param])) {
+                $this->response->getBody()->write(
+                    'MissingRequiredParameter: ' . $param
+                );
+                return $this->response->withStatus(400);
+            }
+        }
 
         try {
-            $params = $this->getExecutionParams();
+            $personName = null;
+            if (isset($executionParams['name'])) {
+                $personName = new PersonName($executionParams['name']);
+            }
+
+            $nickname = null;
+            if (isset($executionParams['nickname'])) {
+                $nickname = new Nickname($executionParams['nickname']);
+            }
+
+            $phoneNumber = null;
+            if (isset($executionParams['phone'])) {
+                $phoneNumber = new PhoneNumber($executionParams['phone']);
+            }
+
+            $updateContactDto = new UpdateContactDto(
+                new ContactId((int)$executionParams['id']),
+                $personName,
+                $nickname,
+                $phoneNumber
+            );
         } catch (Throwable $th) {
             $this->response->getBody()->write($th->getMessage());
             return $this->response->withStatus(400);
         }
 
-        $contact = new Contact(
-            $params['id'],
-            $params['name'],
-            $params['nickname'],
-            $params['phone']
-        );
+        $contactCommandRepo = new ContactCommandRepository();
+        $updateContact = new UpdateContactUseCase($contactCommandRepo);
 
         try {
-            $updateContact->action($contact);
+            $updateContact->action($updateContactDto);
         } catch (Throwable $th) {
-            $this->response->getBody()->write(
-                'Contact update failed: ' . $th->getMessage()
-            );
+            $this->response->getBody()->write($th->getMessage());
             return $this->response->withStatus(500);
         }
 
-        $this->response->getBody()->write(
-            'Contact updated successfully!'
-        );
+        $this->response->getBody()->write('ContactUpdated');
         return $this->response->withStatus(200);
     }
 }
