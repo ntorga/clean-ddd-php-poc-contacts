@@ -10,6 +10,7 @@ use App\Domain\ValueObject\Nickname;
 use App\Domain\ValueObject\PersonName;
 use App\Domain\ValueObject\PhoneNumber;
 use App\Infrastructure\ContactCommandRepository;
+use App\Presentation\Api\Helper\MissingParamHelper;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Throwable;
@@ -29,18 +30,11 @@ class AddContact
 
     public function action(): Response
     {
-        $executionParams = $this->request->getParsedBody();
         $requiredParams = ['name', 'nickname', 'phone'];
-        foreach ($requiredParams as $param) {
-            if (!isset($executionParams[$param])) {
-                $this->response->getBody()->write(
-                    'Missing required parameter: ' . $param
-                );
-                return $this->response->withStatus(400);
-            }
-        }
-
+        $executionParams = $this->request->getParsedBody();
         try {
+            MissingParamHelper::action($this->request, $requiredParams);
+
             $addContactDto = new AddContactDto(
                 new PersonName($executionParams['name']),
                 new Nickname($executionParams['nickname']),
