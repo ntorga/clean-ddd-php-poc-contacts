@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Presentation\Api;
 
-use App\Presentation\Api\Controller\AddContactController;
-use App\Presentation\Api\Controller\GetContactController;
-use App\Presentation\Api\Controller\GetContactsController;
-use App\Presentation\Api\Controller\RemoveContactController;
-use App\Presentation\Api\Controller\UpdateContactController;
+use App\Presentation\Api\Controller\AddContact;
+use App\Presentation\Api\Controller\GetContact;
+use App\Presentation\Api\Controller\GetContacts;
+use App\Presentation\Api\Controller\RemoveContact;
+use App\Presentation\Api\Controller\UpdateContact;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -32,15 +32,15 @@ return static function (App $app) {
         return $response
             ->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, HEAD, OPTIONS');
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, HEAD, OPTIONS');
     });
 
     /**
      * @OA\Info(
-     *   title="Contact Manager API", version="1.0",
+     *   title="Contact Manager API",
      *   description="A simple contact manager API to demonstrate the concepts
-    of Clean Architecture and DDD with PHP 7.4+.",
-     *   version="1.0",
+     *   of Clean Architecture and DDD with PHP 8.2+.",
+     *   version="1.1",
      *   @OA\Contact(
      *     email="northontorga+github@gmail.com"
      *   ),
@@ -61,24 +61,18 @@ return static function (App $app) {
 
     /**
      * @OA\Tag(
-     *    name="contact",
-     *    description="Operations about Contacts",
-     *    @OA\ExternalDocumentation(
-     *      description="Find out more",
-     *      url="https://ntorga.com"
-     *    )
-     *  )
+     *   name="contact",
+     *   description="Operations about Contacts"
+     * )
      */
-
     $app->group('/v1/contact', static function (RouteCollectorProxy $group) {
-
         /**
          * @OA\Get(
          *   path="/v1/contact",
          *   tags={"contact"},
          *   @OA\Response(
          *     response="200",
-         *     description="All contacts.",
+         *     description="List of all contacts.",
          *     @OA\JsonContent(
          *       type="array",
          *       @OA\Items(ref="#/components/schemas/Contact")
@@ -90,25 +84,7 @@ return static function (App $app) {
             Request $request,
             Response $response
         ): Response {
-            return (new GetContactsController($response))->action();
-        });
-
-        /**
-         * @OA\Post(
-         *   path="/v1/contact",
-         *   tags={"contact"},
-         *   requestBody={"$ref": "#/components/requestBodies/ContactBody"},
-         *   @OA\Response(
-         *      response="200",
-         *      description="Contact created successfully!"
-         *   )
-         * )
-         */
-        $group->post('', static function (
-            Request $request,
-            Response $response
-        ): Response {
-            return (new AddContactController($request, $response))->action();
+            return (new GetContacts($response))->action();
         });
 
         /**
@@ -117,17 +93,17 @@ return static function (App $app) {
          *   @OA\Parameter(
          *     name="id",
          *     in="path",
-         *     description="ID of the contact",
+         *     description="ContactId",
          *     required=true,
          *     @OA\Schema(
          *       type="integer",
-         *       format="int32"
+         *       format="int64"
          *     )
          *   ),
          *   tags={"contact"},
          *   @OA\Response(
          *     response="200",
-         *     description="Contact requested.",
+         *     description="ContactEntity",
          *     @OA\JsonContent(ref="#/components/schemas/Contact")
          *   )
          * )
@@ -137,7 +113,25 @@ return static function (App $app) {
             Response $response,
             array $args
         ): Response {
-            return (new GetContactController($response, $args))->action();
+            return (new GetContact($response, $args))->action();
+        });
+
+        /**
+         * @OA\Post(
+         *   path="/v1/contact",
+         *   tags={"contact"},
+         *   requestBody={"$ref": "#/components/schemas/AddContact"},
+         *   @OA\Response(
+         *      response="200",
+         *      description="ContactCreated"
+         *   )
+         * )
+         */
+        $group->post('', static function (
+            Request $request,
+            Response $response
+        ): Response {
+            return (new AddContact($request, $response))->action();
         });
 
         /**
