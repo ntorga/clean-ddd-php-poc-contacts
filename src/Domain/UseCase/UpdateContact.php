@@ -11,13 +11,9 @@ use Throwable;
 
 class UpdateContact
 {
-    private ContactCommandRepositoryInterface $commandRepo;
-
     public function __construct(
-        ContactCommandRepositoryInterface $commandRepo
-    ) {
-        $this->commandRepo = $commandRepo;
-    }
+        private ContactCommandRepositoryInterface $commandRepo
+    ) {}
 
     public function action(UpdateContactDto $updatedContact): void
     {

@@ -17,30 +17,22 @@ use JsonSerializable;
  */
 class AddContact implements JsonSerializable
 {
-    /**
-     * @OA\Property(type="string")
-     */
-    private PersonName $name;
-
-    /**
-     * @OA\Property(type="string")
-     */
-    private Nickname $nickname;
-
-    /**
-     * @OA\Property(type="string")
-     */
-    private PhoneNumber $phone;
-
     public function __construct(
-        PersonName $name,
-        Nickname $nickname,
-        PhoneNumber $phone
-    ) {
-        $this->name = $name;
-        $this->nickname = $nickname;
-        $this->phone = $phone;
-    }
+        /**
+         * @OA\Property(type="string")
+         */
+        public readonly PersonName $name,
+
+        /**
+         * @OA\Property(type="string")
+         */
+        public readonly Nickname $nickname,
+
+        /**
+         * @OA\Property(type="string")
+         */
+        public readonly PhoneNumber $phone
+    ) {}
 
     public function jsonSerialize(): array
     {

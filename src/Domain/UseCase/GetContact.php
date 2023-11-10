@@ -12,13 +12,9 @@ use Throwable;
 
 class GetContact
 {
-    private ContactQueryRepositoryInterface $queryRepo;
-
     public function __construct(
-        ContactQueryRepositoryInterface $queryRepo
-    ) {
-        $this->queryRepo = $queryRepo;
-    }
+        private ContactQueryRepositoryInterface $queryRepo
+    ) {}
 
     public function action(ContactId $contactId): Contact
     {

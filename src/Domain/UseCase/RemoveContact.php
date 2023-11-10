@@ -13,16 +13,10 @@ use Throwable;
 
 class RemoveContact
 {
-    private ContactQueryRepositoryInterface $queryRepo;
-    private ContactCommandRepositoryInterface $commandRepo;
-
     public function __construct(
-        ContactQueryRepositoryInterface $queryRepo,
-        ContactCommandRepositoryInterface $commandRepo
-    ) {
-        $this->queryRepo = $queryRepo;
-        $this->commandRepo = $commandRepo;
-    }
+        private ContactQueryRepositoryInterface $queryRepo,
+        private ContactCommandRepositoryInterface $commandRepo
+    ) {}
 
     public function action(ContactId $contactId): void
     {
