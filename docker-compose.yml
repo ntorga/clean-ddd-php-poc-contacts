@@ -3,7 +3,7 @@ version: "3"
 services:
   composer:
     image: composer:latest
-    command: [ "composer", "update" ]
+    command: [ "composer", "install" ]
     volumes:
       - .:/app
 
