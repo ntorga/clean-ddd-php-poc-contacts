@@ -13,16 +13,10 @@ use Throwable;
 
 class RemoveContact
 {
-    private Response $response;
-    private array $args;
-
     public function __construct(
-        Response $response,
-        array $args
-    ) {
-        $this->response = $response;
-        $this->args = $args;
-    }
+        private Response $response,
+        private array $args
+    ) {}
 
     public function action(): Response
     {
