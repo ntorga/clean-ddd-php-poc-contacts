@@ -31,8 +31,14 @@ return static function (App $app) {
         $response = $handler->handle($request);
         return $response
             ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, HEAD, OPTIONS');
+            ->withHeader(
+                'Access-Control-Allow-Headers',
+                'X-Requested-With, Content-Type, Accept, Origin, Authorization',
+            )
+            ->withHeader(
+                'Access-Control-Allow-Methods',
+                'GET, POST, PUT, DELETE, HEAD, OPTIONS',
+            );
     });
 
     /**
@@ -140,18 +146,18 @@ return static function (App $app) {
          *   @OA\Parameter(
          *     name="id",
          *     in="path",
-         *     description="ID of the contact",
+         *     description="ContactId",
          *     required=true,
          *     @OA\Schema(
          *       type="integer",
-         *       format="int32"
+         *       format="int64"
          *     )
          *   ),
          *   tags={"contact"},
-         *   requestBody={"$ref": "#/components/requestBodies/ContactBody"},
+         *   requestBody={"$ref": "#/components/schemas/UpdateContact"},
          *   @OA\Response(
          *      response="200",
-         *      description="Contact updated successfully!"
+         *      description="ContactUpdated"
          *   )
          * )
          */
@@ -160,11 +166,7 @@ return static function (App $app) {
             Response $response,
             array $args
         ): Response {
-            return (new UpdateContactController(
-                $request,
-                $response,
-                $args
-            ))->action();
+            return (new UpdateContact($request, $response, $args))->action();
         });
 
         /**
@@ -173,17 +175,17 @@ return static function (App $app) {
          *   @OA\Parameter(
          *     name="id",
          *     in="path",
-         *     description="ID of the contact",
+         *     description="ContactId",
          *     required=true,
          *     @OA\Schema(
          *       type="integer",
-         *       format="int32"
+         *       format="int64"
          *     )
          *   ),
          *   tags={"contact"},
          *   @OA\Response(
          *      response="200",
-         *      description="Contact removed successfully!"
+         *      description="ContactRemoved"
          *   )
          * )
          */
@@ -192,7 +194,7 @@ return static function (App $app) {
             Response $response,
             array $args
         ): Response {
-            return (new RemoveContactController($response, $args))->action();
+            return (new RemoveContact($response, $args))->action();
         });
     });
 
