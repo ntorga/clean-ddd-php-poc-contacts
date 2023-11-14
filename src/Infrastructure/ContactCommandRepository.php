@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
+use App\Domain\Dto\AddContact;
+use App\Domain\Dto\UpdateContact;
 use App\Domain\Entity\Contact;
 use App\Domain\Repository\ContactCommandRepositoryInterface;
 use App\Domain\ValueObject\ContactId;
@@ -29,11 +31,7 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
         $this->contacts = (new ContactQueryRepository())->getContacts();
     }
 
-    public function addContact(
-        PersonName $name,
-        Nickname $nickname,
-        PhoneNumber $phoneNumber
-    ): void
+    public function add(AddContact $addContact): void
     {
         $newContactId = 1;
         if (count($this->contacts) > 0) {
@@ -55,7 +53,7 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
         $this->contactsDir->put($contactFileName, $contactData);
     }
 
-    public function removeContact(ContactId $contactId): void
+    public function remove(ContactId $contactId): void
     {
         $contactFileName = $contactId->getId() . '.contact';
         try {
@@ -67,7 +65,7 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
         }
     }
 
-    public function updateContact(Contact $updatedContact): void
+    public function update(UpdateContact $updatedContact): void
     {
         $contactFileName = $updatedContact->getId()->getId() . '.contact';
 
