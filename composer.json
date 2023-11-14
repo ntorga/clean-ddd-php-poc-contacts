@@ -18,7 +18,7 @@
     "slim/slim": "^4.12",
     "slim/psr7": "^1.6",
     "vlucas/phpdotenv": "^5.5",
-    "league/flysystem": "^3.16",
+    "league/flysystem": "^3.19",
     "zircote/swagger-php": "^4.7"
   },
   "require-dev": {
