@@ -60,7 +60,7 @@ return static function (App $app) {
      *   description="Production server"
      * )
      * @OA\Server(
-     *   url="https://localhost",
+     *   url="http://localhost",
      *   description="Development environment"
      * )
      */
