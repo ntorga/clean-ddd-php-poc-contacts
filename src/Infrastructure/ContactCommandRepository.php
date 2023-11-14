@@ -16,24 +16,26 @@ use JsonException;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use RuntimeException;
+use Throwable;
 
 class ContactCommandRepository implements ContactCommandRepositoryInterface
 {
-    private Filesystem $contactsDir;
-    private array $contacts;
+    private Filesystem $filesystem;
 
     public function __construct()
     {
-        $this->contactsDir = new Filesystem(
-            new Local($_ENV["CONTACTS_DIR"])
-        );
-        $this->contacts = (new ContactQueryRepository())->getContacts();
+        $rootPath = $_ENV["CONTACTS_DIR"];
+        $adapter = new LocalFilesystemAdapter($rootPath);
+        $this->filesystem = new Filesystem($adapter);
     }
 
     public function add(AddContact $addContact): void
     {
-        $newContactId = count($this->contacts) + 1;
+        $contactQueryRepo = new ContactQueryRepository();
+        $contactsCount = $contactQueryRepo->count();
+        $newContactId = $contactsCount + 1;
 
         $contactEntity = new Contact(
             new ContactId($newContactId),
@@ -52,19 +54,13 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
         }
 
         $contactFileName = $newContactId . '.contact';
-        $this->contactsDir->put($contactFileName, $contactData);
+        $this->filesystem->write($contactFileName, $contactData);
     }
 
     public function remove(ContactId $contactId): void
     {
         $contactFileName = $contactId->getId() . '.contact';
-        try {
-            $this->contactsDir->delete($contactFileName);
-        } catch (FileNotFoundException $e) {
-            if ($this->contactsDir->has($contactFileName)) {
-                throw new RuntimeException('Unable to delete contact.');
-            }
-        }
+        $this->filesystem->delete($contactFileName);
     }
 
     public function update(UpdateContact $updatedContact): void
@@ -78,7 +74,7 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
         }
 
         try {
-            $this->contactsDir->update($contactFileName, $contactData);
+            $this->filesystem->update($contactFileName, $contactData);
         } catch (FileNotFoundException $e) {
             throw new RuntimeException('Contact does not exist.');
         }
