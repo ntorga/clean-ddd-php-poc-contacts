@@ -33,20 +33,22 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
 
     public function add(AddContact $addContact): void
     {
-        $newContactId = 1;
-        if (count($this->contacts) > 0) {
-            $newContactId = end($this->contacts)["id"] + 1;
-        }
+        $newContactId = count($this->contacts) + 1;
+
+        $contactEntity = new Contact(
+            new ContactId($newContactId),
+            $addContact->getName(),
+            $addContact->getNickname(),
+            $addContact->getPhone()
+        );
 
         try {
-            $contactData = json_encode(new Contact(
-                new ContactId($newContactId),
-                $name,
-                $nickname,
-                $phoneNumber
-            ), JSON_THROW_ON_ERROR);
+            $contactData = json_encode(
+                $contactEntity,
+                JSON_THROW_ON_ERROR
+            );
         } catch (JsonException $e) {
-            throw new RuntimeException('Contact data is invalid.');
+            throw new RuntimeException('ContactDataInvalid');
         }
 
         $contactFileName = $newContactId . '.contact';
