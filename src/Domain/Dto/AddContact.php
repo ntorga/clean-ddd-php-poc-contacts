@@ -42,6 +42,21 @@ class AddContact implements JsonSerializable
         $this->phone = $phone;
     }
 
+    public function getName(): PersonName
+    {
+        return $this->name;
+    }
+
+    public function getNickname(): Nickname
+    {
+        return $this->nickname;
+    }
+
+    public function getPhone(): PhoneNumber
+    {
+        return $this->phone;
+    }
+
     public function jsonSerialize(): array
     {
         return [

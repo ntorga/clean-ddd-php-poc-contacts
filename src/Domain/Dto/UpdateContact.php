@@ -48,4 +48,24 @@ class UpdateContact
         $this->nickname = $nickname;
         $this->phone = $phone;
     }
+
+    public function getId(): ContactId
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?PersonName
+    {
+        return $this->name;
+    }
+
+    public function getNickname(): ?Nickname
+    {
+        return $this->nickname;
+    }
+
+    public function getPhone(): ?PhoneNumber
+    {
+        return $this->phone;
+    }
 }
