@@ -9,16 +9,10 @@ use App\Domain\Dto\UpdateContact;
 use App\Domain\Entity\Contact;
 use App\Domain\Repository\ContactCommandRepositoryInterface;
 use App\Domain\ValueObject\ContactId;
-use App\Domain\ValueObject\Nickname;
-use App\Domain\ValueObject\PersonName;
-use App\Domain\ValueObject\PhoneNumber;
 use JsonException;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use RuntimeException;
-use Throwable;
 
 class ContactCommandRepository implements ContactCommandRepositoryInterface
 {
@@ -65,18 +59,41 @@ class ContactCommandRepository implements ContactCommandRepositoryInterface
 
     public function update(UpdateContact $updatedContact): void
     {
-        $contactFileName = $updatedContact->getId()->getId() . '.contact';
+        $contactQueryRepo = new ContactQueryRepository();
+        $contact = $contactQueryRepo->getById($updatedContact->getId());
+
+        $personName = $contact->getName();
+        if ($updatedContact->getName() !== null) {
+            $personName = $updatedContact->getName();
+        }
+
+        $nickname = $contact->getNickname();
+        if ($updatedContact->getNickname() !== null) {
+            $nickname = $updatedContact->getNickname();
+        }
+
+        $phoneNumber = $contact->getPhone();
+        if ($updatedContact->getPhone() !== null) {
+            $phoneNumber = $updatedContact->getPhone();
+        }
+
+        $newContact = new Contact(
+            $updatedContact->getId(),
+            $personName,
+            $nickname,
+            $phoneNumber
+        );
 
         try {
-            $contactData = json_encode($updatedContact, JSON_THROW_ON_ERROR);
+            $contactData = json_encode(
+                $newContact,
+                JSON_THROW_ON_ERROR
+            );
         } catch (JsonException $e) {
-            throw new RuntimeException('Contact data is invalid.');
+            throw new RuntimeException('ContactDataInvalid');
         }
 
-        try {
-            $this->filesystem->update($contactFileName, $contactData);
-        } catch (FileNotFoundException $e) {
-            throw new RuntimeException('Contact does not exist.');
-        }
+        $contactFileName = $updatedContact->getId() . '.contact';
+        $this->filesystem->write($contactFileName, $contactData);
     }
 }
