@@ -4,35 +4,41 @@ declare(strict_types=1);
 
 namespace App\Infrastructure;
 
+use App\Domain\Entity\Contact;
 use App\Domain\Repository\ContactQueryRepositoryInterface;
-use JsonException;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\FileNotFoundException;
+use App\Domain\ValueObject\ContactId;
+use App\Domain\ValueObject\Nickname;
+use App\Domain\ValueObject\PersonName;
+use App\Domain\ValueObject\PhoneNumber;
+use League\Flysystem\FileAttributes;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
+use JsonException;
 use RuntimeException;
 
 class ContactQueryRepository implements ContactQueryRepositoryInterface
 {
-    private Filesystem $contactsDir;
+    private Filesystem $filesystem;
 
     public function __construct()
     {
-        $this->contactsDir = new Filesystem(
-            new Local($_ENV["CONTACTS_DIR"])
-        );
+        $rootPath = $_ENV["CONTACTS_DIR"];
+        $adapter = new LocalFilesystemAdapter($rootPath);
+        $this->filesystem = new Filesystem($adapter);
     }
 
-    private function getContactFiles(): array
+    private function getContactFilePaths(): array
     {
-        $allInodes = $this->contactsDir->listContents();
+        $inodes = $this->filesystem->listContents("", false);
         $contactFiles = [];
-        foreach ($allInodes as $inode) {
-            $isFile = $inode["type"] === "file";
+        foreach ($inodes as $inode) {
+            $isFile = $inode instanceof FileAttributes;
             if (!$isFile) {
                 continue;
             }
 
-            $isContact = $inode["extension"] === "contact";
+            $extension = pathinfo($inode->path(), PATHINFO_EXTENSION);
+            $isContact = $extension === "contact";
             if ($isContact) {
                 $contactFiles[] = $inode["path"];
             }
@@ -40,38 +46,53 @@ class ContactQueryRepository implements ContactQueryRepositoryInterface
         return $contactFiles;
     }
 
-    private function loadContactFromFile(string $contactFile): array
+    private function contactFactory(string $contactFilePath): Contact
     {
-        try {
-            $contactFileContent = $this->contactsDir->read($contactFile);
-        } catch (FileNotFoundException $e) {
-            throw new RuntimeException('File does not exist.');
-        }
+        $contactFileContent = $this->filesystem->read($contactFilePath);
 
         try {
-            $contactRaw = json_decode($contactFileContent,
+            $contactRaw = json_decode(
+                $contactFileContent,
                 true,
                 512,
                 JSON_THROW_ON_ERROR
             );
         } catch (JsonException $e) {
-            throw new RuntimeException('Contact data invalid.');
+            throw new RuntimeException('ContactDataInvalid');
         }
 
-        return $contactRaw;
+        return new Contact(
+            new ContactId($contactRaw["id"]),
+            new PersonName($contactRaw["name"]),
+            new Nickname($contactRaw["nickname"]),
+            new PhoneNumber($contactRaw["phone"])
+        );
     }
 
-    public function getContacts(): array
+    public function get(): array
     {
-        $contactFiles = $this->getContactFiles();
+        $contactFilePaths = $this->getContactFilePaths();
         $contacts = [];
-        foreach ($contactFiles as $contactFile) {
+        foreach ($contactFilePaths as $contactFilePath) {
             try {
-                $contacts[] = $this->loadContactFromFile($contactFile);
+                $contacts[] = $this->contactFactory($contactFilePath);
             } catch (RuntimeException $e) {
+                error_log(
+                    "[" . $contactFilePath . "] ContactFactoryError: " . $e->getMessage(),
+                );
                 continue;
             }
         }
         return $contacts;
+    }
+
+    public function getById(ContactId $id): Contact
+    {
+        return new Contact(
+            $id,
+            new PersonName("John"),
+            new Nickname("john"),
+            new PhoneNumber("123456789")
+        );
     }
 }

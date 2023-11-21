@@ -22,7 +22,8 @@ class ContactQueryRepositoryTest extends TestCase
 
     public function testGetContacts(): void
     {
-        $sut = $this->queryRepo->getContacts();
-        self::assertIsArray($sut);
+        $sut = $this->queryRepo->get();
+        $hasItems = count($sut) > 0;
+        $this->assertTrue($hasItems);
     }
 }
