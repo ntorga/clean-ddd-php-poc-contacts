@@ -88,11 +88,13 @@ class ContactQueryRepository implements ContactQueryRepositoryInterface
 
     public function getById(ContactId $id): Contact
     {
-        return new Contact(
-            $id,
-            new PersonName("John"),
-            new Nickname("john"),
-            new PhoneNumber("123456789")
-        );
+        $fileName = $id . ".contact";
+
+        $fileExists = $this->filesystem->fileExists($fileName);
+        if (!$fileExists) {
+            throw new RuntimeException('ContactNotFound');
+        }
+
+        return $this->contactFactory($fileName);
     }
 }
