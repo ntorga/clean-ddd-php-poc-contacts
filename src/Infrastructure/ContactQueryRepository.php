@@ -27,10 +27,10 @@ class ContactQueryRepository implements ContactQueryRepositoryInterface
         $this->filesystem = new Filesystem($adapter);
     }
 
-    private function getContactFilePaths(): array
+    private function getContactFileNames(): array
     {
         $inodes = $this->filesystem->listContents("", false);
-        $contactFiles = [];
+        $contactFileNames = [];
         foreach ($inodes as $inode) {
             $isFile = $inode instanceof FileAttributes;
             if (!$isFile) {
@@ -39,16 +39,18 @@ class ContactQueryRepository implements ContactQueryRepositoryInterface
 
             $extension = pathinfo($inode->path(), PATHINFO_EXTENSION);
             $isContact = $extension === "contact";
-            if ($isContact) {
-                $contactFiles[] = $inode["path"];
+            if (!$isContact) {
+                continue;
             }
+
+            $contactFileNames[] = $inode->path();
         }
-        return $contactFiles;
+        return $contactFileNames;
     }
 
-    private function contactFactory(string $contactFilePath): Contact
+    private function contactFactory(string $contactFileName): Contact
     {
-        $contactFileContent = $this->filesystem->read($contactFilePath);
+        $contactFileContent = $this->filesystem->read($contactFileName);
 
         try {
             $contactRaw = json_decode(
@@ -71,14 +73,14 @@ class ContactQueryRepository implements ContactQueryRepositoryInterface
 
     public function get(): array
     {
-        $contactFilePaths = $this->getContactFilePaths();
+        $contactFileNames = $this->getContactFileNames();
         $contacts = [];
-        foreach ($contactFilePaths as $contactFilePath) {
+        foreach ($contactFileNames as $contactFileName) {
             try {
-                $contacts[] = $this->contactFactory($contactFilePath);
+                $contacts[] = $this->contactFactory($contactFileName);
             } catch (RuntimeException $e) {
                 error_log(
-                    "[" . $contactFilePath . "] ContactFactoryError: " . $e->getMessage(),
+                    "[" . $contactFileName . "] ContactFactoryError: " . $e->getMessage(),
                 );
                 continue;
             }
