@@ -99,4 +99,10 @@ class ContactQueryRepository implements ContactQueryRepositoryInterface
 
         return $this->contactFactory($fileName);
     }
+
+    public function count(): int
+    {
+        $contactFileNames = $this->getContactFileNames();
+        return count($contactFileNames);
+    }
 }

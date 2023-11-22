@@ -34,4 +34,10 @@ class ContactQueryRepositoryTest extends TestCase
         $sut = $this->queryRepo->getById($contactId);
         $this->expectNotToPerformAssertions();
     }
+
+    public function testGetCount(): void
+    {
+        $sut = $this->queryRepo->count();
+        $this->assertTrue($sut > 0);
+    }
 }
