@@ -23,21 +23,33 @@ class ContactQueryRepositoryTest extends TestCase
 
     public function testGetContacts(): void
     {
+        ContactCommandRepositoryTest::addDummyContact();
+
         $sut = $this->queryRepo->get();
         $hasItems = count($sut) > 0;
         $this->assertTrue($hasItems);
+
+        ContactCommandRepositoryTest::removeDummyContact();
     }
 
     public function testGetContactById(): void
     {
+        ContactCommandRepositoryTest::addDummyContact();
+
         $contactId = new ContactId(1);
-        $sut = $this->queryRepo->getById($contactId);
         $this->expectNotToPerformAssertions();
+        $this->queryRepo->getById($contactId);
+
+        ContactCommandRepositoryTest::removeDummyContact();
     }
 
     public function testGetCount(): void
     {
+        ContactCommandRepositoryTest::addDummyContact();
+
         $sut = $this->queryRepo->count();
         $this->assertTrue($sut > 0);
+
+        ContactCommandRepositoryTest::removeDummyContact();
     }
 }
