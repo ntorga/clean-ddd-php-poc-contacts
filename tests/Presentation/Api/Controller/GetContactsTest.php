@@ -25,7 +25,7 @@ class GetContactsTest extends TestCase
         $this->response = (new ResponseFactory)->createResponse();
     }
 
-    public function testRemoveContact(): void
+    public function testGetContacts(): void
     {
         ContactCommandRepositoryTest::addDummyContact();
 
