@@ -22,29 +22,30 @@ class ContactCommandRepositoryTest extends TestCase
     public function setUp(): void
     {
         $this->loadEnvs();
-        $this->commandRepo = new ContactCommandRepository();
     }
 
-    public function addDummyContact(): void
+    public static function addDummyContact(): void
     {
+        $commandRepo = new ContactCommandRepository();
         $addContactDto = new AddContact(
             new PersonName('Egon Spengler'),
             new Nickname('Egon'),
             new PhoneNumber('555-2368')
         );
-        $this->commandRepo->add($addContactDto);
+        $commandRepo->add($addContactDto);
     }
 
-    public function removeDummyContact(): void
+    public static function removeDummyContact(): void
     {
+        $commandRepo = new ContactCommandRepository();
         $contactId = new ContactId(1);
-        $this->commandRepo->remove($contactId);
+        $commandRepo->remove($contactId);
     }
 
     public function testAddAndRemoveContact(): void
     {
         $this->expectNotToPerformAssertions();
-        $this->addDummyContact();
-        $this->removeDummyContact();
+        self::addDummyContact();
+        self::removeDummyContact();
     }
 }
