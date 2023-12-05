@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Tests\Presentation\Api\Controller;
 
-use App\Presentation\Api\Controller\GetContactsController;
+use App\Presentation\Api\Controller\GetContacts as GetContactsController;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Psr7\Factory\ResponseFactory;
 use Tests\HttpTestTrait;
-use Tests\InteractorTrait;
+use Tests\Infrastructure\ContactCommandRepositoryTest;
 use Tests\LoadEnvsTrait;
 
-class GetContactsControllerTest extends TestCase
+class GetContactsTest extends TestCase
 {
     use LoadEnvsTrait;
     use HttpTestTrait;
-    use InteractorTrait;
 
     private Response $response;
 
@@ -28,7 +27,7 @@ class GetContactsControllerTest extends TestCase
 
     public function testRemoveContact(): void
     {
-        $this->addContact();
+        ContactCommandRepositoryTest::addDummyContact();
 
         $getContactsController = new GetContactsController(
             $this->response
@@ -36,6 +35,6 @@ class GetContactsControllerTest extends TestCase
         $result = $getContactsController->action();
         self::assertEquals(200, $result->getStatusCode());
 
-        $this->removeContact();
+        ContactCommandRepositoryTest::removeDummyContact();
     }
 }
