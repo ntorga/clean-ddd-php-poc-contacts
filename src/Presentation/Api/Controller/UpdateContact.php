@@ -36,6 +36,8 @@ class UpdateContact
         try {
             MissingParamHelper::action($this->request, $requiredParams);
 
+            $contactId = new ContactId((int)$executionParams['id']);
+
             $personName = null;
             if (isset($executionParams['name'])) {
                 $personName = new PersonName($executionParams['name']);
@@ -52,7 +54,7 @@ class UpdateContact
             }
 
             $updateContactDto = new UpdateContactDto(
-                new ContactId((int)$executionParams['id']),
+                $contactId,
                 $personName,
                 $nickname,
                 $phoneNumber
