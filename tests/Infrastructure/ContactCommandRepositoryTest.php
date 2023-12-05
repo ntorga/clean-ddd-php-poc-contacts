@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Infrastructure;
 
+use App\Domain\Dto\AddContact;
 use App\Domain\ValueObject\ContactId;
 use App\Domain\ValueObject\Nickname;
 use App\Domain\ValueObject\PersonName;
@@ -24,15 +25,26 @@ class ContactCommandRepositoryTest extends TestCase
         $this->commandRepo = new ContactCommandRepository();
     }
 
-    public function testAddAndRemoveContact(): void
+    public function addDummyContact(): void
     {
-        $contactId = new ContactId(1);
-        $this->expectNotToPerformAssertions();
-        $this->commandRepo->addContact(
+        $addContactDto = new AddContact(
             new PersonName('Egon Spengler'),
             new Nickname('Egon'),
             new PhoneNumber('555-2368')
         );
-        $this->commandRepo->removeContact($contactId);
+        $this->commandRepo->add($addContactDto);
+    }
+
+    public function removeDummyContact(): void
+    {
+        $contactId = new ContactId(1);
+        $this->commandRepo->remove($contactId);
+    }
+
+    public function testAddAndRemoveContact(): void
+    {
+        $this->expectNotToPerformAssertions();
+        $this->addDummyContact();
+        $this->removeDummyContact();
     }
 }
