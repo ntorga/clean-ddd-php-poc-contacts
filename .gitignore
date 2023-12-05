@@ -3,4 +3,4 @@ TODO.md
 config/
 contacts/
 .idea/
-/.phpunit.result.cache
+/.phpunit*
