@@ -4,27 +4,29 @@ declare(strict_types=1);
 
 namespace Tests\Presentation\Api\Controller;
 
-use App\Presentation\Api\Controller\AddContactController;
+use App\Presentation\Api\Controller\AddContact as AddContactController;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Factory\ResponseFactory;
 use Tests\HttpTestTrait;
-use Tests\InteractorTrait;
+use Tests\Infrastructure\ContactCommandRepositoryTest;
 use Tests\LoadEnvsTrait;
 
-class AddContactControllerTest extends TestCase
+class AddContactTest extends TestCase
 {
     use LoadEnvsTrait;
     use HttpTestTrait;
-    use InteractorTrait;
 
-    private ServerRequestInterface $request;
     private Response $response;
 
     public function setUp(): void
     {
         $this->loadEnvs();
+        $this->response = (new ResponseFactory)->createResponse();
+    }
+
+    public function testAddContact(): void
+    {
         $executionParams = [
             "name" => "Egon Spengler",
             "nickname" => "Egon",
@@ -34,19 +36,18 @@ class AddContactControllerTest extends TestCase
             'POST',
             '/v1/contact'
         );
-        $this->request = $this->withJson($psr17ServerRequestFactory, $executionParams);
-        $this->response = (new ResponseFactory)->createResponse();
-    }
+        $request = $this->withJson(
+            $psr17ServerRequestFactory,
+            $executionParams,
+        );
 
-    public function testAddContact(): void
-    {
         $addContact = new AddContactController(
-            $this->request,
+            $request,
             $this->response
         );
         $result = $addContact->action();
-        self::assertEquals(200, $result->getStatusCode());
+        self::assertEquals(201, $result->getStatusCode());
 
-        $this->removeContact();
+        ContactCommandRepositoryTest::removeDummyContact();
     }
 }
