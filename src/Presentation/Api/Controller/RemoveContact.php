@@ -37,20 +37,23 @@ class RemoveContact
         $commandRepo = new ContactCommandRepository();
         $removeContact = new RemoveContactUseCase($queryRepo, $commandRepo);
 
+        $statusCode = 200;
+        $returnMessage = "ContactRemoved";
+
         try {
             $removeContact->action($contactId);
         } catch (Throwable $th) {
-            $errorMessage = $th->getMessage();
             $statusCode = 500;
+
+            $errorMessage = $th->getMessage();
             if ($errorMessage === 'ContactNotFound') {
                 $statusCode = 404;
             }
 
-            $this->response->getBody()->write($errorMessage);
-            return $this->response->withStatus($statusCode);
+            $returnMessage = $errorMessage;
         }
 
-        $this->response->getBody()->write('ContactRemoved');
-        return $this->response->withStatus(200);
+        $this->response->getBody()->write($returnMessage);
+        return $this->response->withStatus($statusCode);
     }
 }
