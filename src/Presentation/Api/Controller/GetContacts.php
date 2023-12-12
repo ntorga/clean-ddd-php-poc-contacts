@@ -8,7 +8,22 @@ use App\Domain\UseCase\GetContacts as GetContactsUseCase;
 use App\Infrastructure\ContactQueryRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Throwable;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Get(
+ *   path="/v1/contact",
+ *   tags={"contact"},
+ *   @OA\Response(
+ *     response="200",
+ *     description="List of all contacts.",
+ *     @OA\JsonContent(
+ *       type="array",
+ *       @OA\Items(ref="#/components/schemas/Contact")
+ *     )
+ *   )
+ * )
+ */
 class GetContacts
 {
     private Response $response;

@@ -9,7 +9,29 @@ use App\Domain\ValueObject\ContactId;
 use App\Infrastructure\ContactQueryRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Throwable;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Get(
+ *   path="/v1/contact/{id}",
+ *   @OA\Parameter(
+ *     name="id",
+ *     in="path",
+ *     description="ContactId",
+ *     required=true,
+ *     @OA\Schema(
+ *       type="integer",
+ *       format="int64"
+ *     )
+ *   ),
+ *   tags={"contact"},
+ *   @OA\Response(
+ *     response="200",
+ *     description="ContactEntity",
+ *     @OA\JsonContent(ref="#/components/schemas/Contact")
+ *   )
+ * )
+ */
 class GetContact
 {
     private Response $response;

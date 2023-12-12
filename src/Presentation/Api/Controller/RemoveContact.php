@@ -10,7 +10,28 @@ use App\Infrastructure\ContactCommandRepository;
 use App\Infrastructure\ContactQueryRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Throwable;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Delete(
+ *   path="/v1/contact/{id}",
+ *   @OA\Parameter(
+ *     name="id",
+ *     in="path",
+ *     description="ContactId",
+ *     required=true,
+ *     @OA\Schema(
+ *       type="integer",
+ *       format="int64"
+ *     )
+ *   ),
+ *   tags={"contact"},
+ *   @OA\Response(
+ *      response="200",
+ *      description="ContactRemoved"
+ *   )
+ * )
+ */
 class RemoveContact
 {
     private Response $response;

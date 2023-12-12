@@ -14,7 +14,19 @@ use App\Presentation\Api\Helper\MissingParamHelper;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Throwable;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Post(
+ *   path="/v1/contact",
+ *   tags={"contact"},
+ *   requestBody={"$ref": "#/components/schemas/AddContact"},
+ *   @OA\Response(
+ *      response="200",
+ *      description="ContactCreated"
+ *   )
+ * )
+ */
 class AddContact
 {
     private Request $request;

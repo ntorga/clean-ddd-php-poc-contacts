@@ -15,7 +15,29 @@ use App\Presentation\Api\Helper\MissingParamHelper;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Throwable;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Put(
+ *   path="/v1/contact/{id}",
+ *   @OA\Parameter(
+ *     name="id",
+ *     in="path",
+ *     description="ContactId",
+ *     required=true,
+ *     @OA\Schema(
+ *       type="integer",
+ *       format="int64"
+ *     )
+ *   ),
+ *   tags={"contact"},
+ *   requestBody={"$ref": "#/components/schemas/UpdateContact"},
+ *   @OA\Response(
+ *      response="200",
+ *      description="ContactUpdated"
+ *   )
+ * )
+ */
 class UpdateContact
 {
     private Request $request;
