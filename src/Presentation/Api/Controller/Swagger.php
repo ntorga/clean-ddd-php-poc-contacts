@@ -10,8 +10,7 @@ use OpenApi\Annotations as OA;
 /**
  * @OA\Info(
  *   title="Contact Manager API",
- *   description="A simple contact manager API to demonstrate the concepts
- *   of Clean Architecture and DDD with PHP 8.2+.",
+ *   description="A simple contact manager API to demonstrate the concepts of Clean Architecture and DDD with PHP 8.2+.",
  *   version="1.1",
  *   @OA\Contact(
  *     email="northontorga+github@gmail.com"
