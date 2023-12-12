@@ -1,0 +1,222 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Contact Manager API",
+        "description": "A simple contact manager API to demonstrate the concepts\n *   of Clean Architecture and DDD with PHP 8.2+.",
+        "contact": {
+            "email": "northontorga+github@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.1"
+    },
+    "servers": [
+        {
+            "url": "https://myproductionserver.com",
+            "description": "Production server"
+        },
+        {
+            "url": "http://localhost",
+            "description": "Development environment"
+        }
+    ],
+    "paths": {
+        "/v1/contact": {
+            "get": {
+                "tags": [
+                    "contact"
+                ],
+                "operationId": "c91faa537b77132db2fd9a66ad951911",
+                "responses": {
+                    "200": {
+                        "description": "List of all contacts.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Contact"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "contact"
+                ],
+                "operationId": "b8b48a3a6d6b9f00e0313d90086fb267",
+                "requestBody": {
+                    "$ref": "#/components/schemas/AddContact"
+                },
+                "responses": {
+                    "200": {
+                        "description": "ContactCreated"
+                    }
+                }
+            }
+        },
+        "/v1/contact/{id}": {
+            "get": {
+                "tags": [
+                    "contact"
+                ],
+                "operationId": "d9babd54b19933e1df414526f180afc5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ContactId",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ContactEntity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Contact"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "contact"
+                ],
+                "operationId": "330aa01a396731be48eab67b7e96700a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ContactId",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/schemas/UpdateContact"
+                },
+                "responses": {
+                    "200": {
+                        "description": "ContactUpdated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "contact"
+                ],
+                "operationId": "b9a0d14038b1fcedc9fe1532277fd4fe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ContactId",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ContactRemoved"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AddContact": {
+                "title": "AddContact",
+                "required": [
+                    "name",
+                    "nickname",
+                    "phone"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "nickname": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateContact": {
+                "title": "UpdateContact",
+                "required": [
+                    "id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "nickname": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Contact": {
+                "title": "Contact",
+                "required": [
+                    "id",
+                    "name",
+                    "nickname",
+                    "phone"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "nickname": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "contact",
+            "description": "Operations about Contacts"
+        }
+    ]
+}
