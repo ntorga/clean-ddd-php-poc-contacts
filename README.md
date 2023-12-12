@@ -25,9 +25,25 @@ Feel free to change the directory. As this is a proof of concept, when you stop 
 Speaking of Docker container, to deploy the API you just need to run `docker-compose up -d` to get the API running and answering on port 443.  
   
 ## Documentation  
-  
-The API documentation follows the [OpenAPI v3 specification](https://swagger.io/specification/) and you simply need to import the URL `https://github.com/ntorga/clean-ddd-php-poc-contacts/raw/master/openapi.json` on the [Swagger Online Editor](https://editor.swagger.io/) to get all details and try the API.  
-  
+
+The API documentation follows the [OpenAPI v3 specification](https://swagger.io/specification/).
+
+### Generating the Documentation
+
+To generate the documentation, you need to have composer and the dependencies installed. Then, run the following command:
+
+```
+vendor/bin/openapi --output src/Presentation/Api/swagger.json src/
+```
+
+You must run this command every time you update the controllers or the domain.
+
+### Viewing the Documentation
+
+The `src/Presentation/Api/swagger.json` file contains the documentation in the OpenAPI v3 specification. To see the documentation, you can use any tool that supports this specification, such as the [Swagger Online Editor](https://editor.swagger.io/).
+
+The swagger file is also available in the API itself. To see it, just access the `/swagger.json` endpoint.
+
 ## Contacts  
 For any question or feedback feel free to contact me:  
 * Email: northontorga _(plus)_ github _(at)_ gmail.com  
