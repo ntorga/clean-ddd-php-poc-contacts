@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Domain\ValueObject\Backup;
+namespace Tests\Domain\ValueObject;
 
 use PHPUnit\Framework\TestCase;
 use Tests\ValidInvalidTestTrait;
