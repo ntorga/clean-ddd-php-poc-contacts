@@ -20,7 +20,11 @@ use OpenApi\Annotations as OA;
  * @OA\Post(
  *   path="/v1/contact",
  *   tags={"contact"},
- *   requestBody={"$ref": "#/components/schemas/AddContact"},
+ *   @OA\RequestBody(
+ *     description="All fields are required.",
+ *     required=true,
+ *     @OA\JsonContent(ref="#/components/schemas/AddContact")
+ *   ),
  *   @OA\Response(
  *      response="200",
  *      description="ContactCreated"

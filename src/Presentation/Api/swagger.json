@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Contact Manager API",
-        "description": "A simple contact manager API to demonstrate the concepts\n *   of Clean Architecture and DDD with PHP 8.2+.",
+        "description": "A simple contact manager API to demonstrate the concepts of Clean Architecture and DDD with PHP 8.2+.",
         "contact": {
             "email": "northontorga+github@gmail.com"
         },
@@ -51,7 +51,15 @@
                 ],
                 "operationId": "b8b48a3a6d6b9f00e0313d90086fb267",
                 "requestBody": {
-                    "$ref": "#/components/schemas/AddContact"
+                    "description": "All fields are required.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddContact"
+                            }
+                        }
+                    }
                 },
                 "responses": {
                     "200": {
@@ -109,7 +117,15 @@
                     }
                 ],
                 "requestBody": {
-                    "$ref": "#/components/schemas/UpdateContact"
+                    "description": "Only id is required.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateContact"
+                            }
+                        }
+                    }
                 },
                 "responses": {
                     "200": {

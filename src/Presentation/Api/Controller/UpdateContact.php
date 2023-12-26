@@ -31,7 +31,11 @@ use OpenApi\Annotations as OA;
  *     )
  *   ),
  *   tags={"contact"},
- *   requestBody={"$ref": "#/components/schemas/UpdateContact"},
+ *   @OA\RequestBody(
+ *     description="Only id is required.",
+ *     required=true,
+ *     @OA\JsonContent(ref="#/components/schemas/UpdateContact")
+ *   ),
  *   @OA\Response(
  *      response="200",
  *      description="ContactUpdated"
