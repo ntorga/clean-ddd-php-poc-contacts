@@ -1,0 +1,10 @@
+# BEGIN RewriteRules
+
+RewriteEngine On
+RewriteBase /
+RewriteRule ^App\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /src/Presentation/Api/App.php [L]
+
+# END RewriteRules
