@@ -1,0 +1,12 @@
+/vendor/
+contacts/
+.idea/
+/.phpunit*
+tests/
+.git*
+phpunit.xml
+Containerfile
+.containerignore
+LICENSE.txt
+README.md
+docker/
