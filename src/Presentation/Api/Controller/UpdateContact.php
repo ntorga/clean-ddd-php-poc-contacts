@@ -19,17 +19,7 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Put(
- *   path="/v1/contact/{id}",
- *   @OA\Parameter(
- *     name="id",
- *     in="path",
- *     description="ContactId",
- *     required=true,
- *     @OA\Schema(
- *       type="integer",
- *       format="int64"
- *     )
- *   ),
+ *   path="/v1/contact",
  *   tags={"contact"},
  *   @OA\RequestBody(
  *     description="Only id is required.",

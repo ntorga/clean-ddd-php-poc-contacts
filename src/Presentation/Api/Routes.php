@@ -71,7 +71,7 @@ return static function (App $app) {
             return (new AddContact($request, $response))->action();
         });
 
-        $group->put('/{id:[0-9]+}', static function (
+        $group->put('', static function (
             Request $request,
             Response $response,
             array $args

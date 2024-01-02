@@ -45,6 +45,28 @@
                     }
                 }
             },
+            "put": {
+                "tags": [
+                    "contact"
+                ],
+                "operationId": "6165e34c73128aa8e0904bc4a4184ae9",
+                "requestBody": {
+                    "description": "Only id is required.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateContact"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "ContactUpdated"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "contact"
@@ -96,40 +118,6 @@
                                 }
                             }
                         }
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "contact"
-                ],
-                "operationId": "330aa01a396731be48eab67b7e96700a",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ContactId",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "description": "Only id is required.",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UpdateContact"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "ContactUpdated"
                     }
                 }
             },
