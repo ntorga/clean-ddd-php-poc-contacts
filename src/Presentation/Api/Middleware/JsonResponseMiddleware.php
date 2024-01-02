@@ -32,11 +32,13 @@ class JsonResponseMiddleware
         $responseCode = $response->getStatusCode();
 
         try {
-            $encodedOriginalBody = json_encode($originalBody, JSON_THROW_ON_ERROR);
-            $encodedNewBody = json_encode([
-                "status" => $responseCode,
-                "body" => $encodedOriginalBody,
-            ]);
+            $encodedNewBody = json_encode(
+                [
+                    "status" => $responseCode,
+                    "body" => $originalBody,
+                ],
+                JSON_THROW_ON_ERROR
+            );
         } catch (JsonException $e) {
             return $response;
         }
