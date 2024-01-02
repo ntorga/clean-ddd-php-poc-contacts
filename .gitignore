@@ -1,6 +1,6 @@
 /vendor/
 TODO.md
-config/
+config/.env
 contacts/
 .idea/
 /.phpunit*
